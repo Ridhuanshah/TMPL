@@ -517,15 +517,30 @@ export function PackageEditFull() {
       if (id) {
         console.log("🔄 Deleting old related data...");
         
-        // Delete and recreate related data (MUST be awaited!)
-        await Promise.all([
-          supabase.from("daily_itinerary").delete().eq("package_id", id),
-          supabase.from("travel_tips").delete().eq("package_id", id),
-          supabase.from("essential_items").delete().eq("package_id", id),
-          supabase.from("package_departure_dates").delete().eq("package_id", id),
-        ]);
-        
-        console.log("✅ Old related data deleted, ready to insert new data");
+        try {
+          // Delete and recreate related data with error handling
+          const deleteResults = await Promise.all([
+            supabase.from("daily_itinerary").delete().eq("package_id", id),
+            supabase.from("travel_tips").delete().eq("package_id", id),
+            supabase.from("essential_items").delete().eq("package_id", id),
+            supabase.from("package_departure_dates").delete().eq("package_id", id),
+          ]);
+          
+          // Log any errors
+          deleteResults.forEach((result, index) => {
+            const tables = ["daily_itinerary", "travel_tips", "essential_items", "package_departure_dates"];
+            if (result.error) {
+              console.error(`❌ Delete ${tables[index]} error:`, result.error);
+            } else {
+              console.log(`✅ Deleted from ${tables[index]}`);
+            }
+          });
+          
+          console.log("✅ Old related data deleted, ready to insert new data");
+        } catch (deleteError) {
+          console.error("❌ DELETE operation error:", deleteError);
+          // Continue anyway - better to try INSERT than fail completely
+        }
       }
 
       // Create itinerary items
