@@ -305,7 +305,7 @@ export function PackageEditFull() {
             setEssentialItems({
               items: itemsData.map((item: any) => ({
                 id: item.id || `item_${item.display_order}`,
-                text: item.item || "",
+                text: item.item_name || "",  // FIX: Use item_name to match database column
               })),
             });
           }
