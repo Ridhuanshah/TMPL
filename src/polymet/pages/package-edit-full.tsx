@@ -513,22 +513,19 @@ export function PackageEditFull() {
         setSaveSuccess(false);
       }, 2500);
 
-      // Handle related data updates in background (non-blocking)
-      // Note: RLS policies may block these operations, so we don't await them
+      // Delete existing related data first (MUST await to prevent race condition)
       if (id) {
-        console.log("🔄 Updating related data in background...");
+        console.log("🔄 Deleting old related data...");
         
-        // Delete and recreate related data (non-blocking)
-        Promise.all([
+        // Delete and recreate related data (MUST be awaited!)
+        await Promise.all([
           supabase.from("daily_itinerary").delete().eq("package_id", id),
           supabase.from("travel_tips").delete().eq("package_id", id),
           supabase.from("essential_items").delete().eq("package_id", id),
           supabase.from("package_departure_dates").delete().eq("package_id", id),
-        ]).then(() => {
-          console.log("✅ Old related data deleted");
-        }).catch((err) => {
-          console.log("⚠️ Delete related data warning (non-blocking):", err);
-        });
+        ]);
+        
+        console.log("✅ Old related data deleted, ready to insert new data");
       }
 
       // Create itinerary items
