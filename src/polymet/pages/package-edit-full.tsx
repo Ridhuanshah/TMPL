@@ -524,12 +524,13 @@ export function PackageEditFull() {
           const tables = ["daily_itinerary", "travel_tips", "essential_items", "package_departure_dates"];
           
           // Use direct REST API calls with fetch (bypasses JS client hanging issue)
+          // IMPORTANT: Use accessToken (not API key) for RLS authentication
           const deletePromises = tables.map(table => 
             fetch(`${supabaseUrl}/rest/v1/${table}?package_id=eq.${id}`, {
               method: 'DELETE',
               headers: {
                 'apikey': supabaseKey,
-                'Authorization': `Bearer ${supabaseKey}`,
+                'Authorization': `Bearer ${accessToken}`,  // Use user session token for RLS
                 'Content-Type': 'application/json',
                 'Prefer': 'return=minimal'
               }
