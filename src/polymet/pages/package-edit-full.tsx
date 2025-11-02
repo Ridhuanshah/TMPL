@@ -814,11 +814,11 @@ export function PackageEditFull() {
                   <Button
                     type="button"
                     variant={formData.status === "active" ? "default" : "outline"}
-                    className="w-full justify-start"
+                    className="w-full justify-start h-auto py-4"
                     onClick={() => setFormData({ ...formData, status: "active" })}
                   >
-                    <GlobeIcon className="h-4 w-4 mr-2" />
-                    <div className="flex flex-col items-start">
+                    <GlobeIcon className="h-4 w-4 mr-3 flex-shrink-0" />
+                    <div className="flex flex-col items-start gap-0.5">
                       <span className="font-medium">Active</span>
                       <span className="text-xs opacity-80">Visible on homepage</span>
                     </div>
@@ -827,11 +827,11 @@ export function PackageEditFull() {
                   <Button
                     type="button"
                     variant={formData.status === "inactive" ? "default" : "outline"}
-                    className="w-full justify-start"
+                    className="w-full justify-start h-auto py-4"
                     onClick={() => setFormData({ ...formData, status: "inactive" })}
                   >
-                    <EyeOffIcon className="h-4 w-4 mr-2" />
-                    <div className="flex flex-col items-start">
+                    <EyeOffIcon className="h-4 w-4 mr-3 flex-shrink-0" />
+                    <div className="flex flex-col items-start gap-0.5">
                       <span className="font-medium">Inactive</span>
                       <span className="text-xs opacity-80">Hidden from homepage</span>
                     </div>
@@ -840,11 +840,11 @@ export function PackageEditFull() {
                   <Button
                     type="button"
                     variant={formData.status === "draft" ? "default" : "outline"}
-                    className="w-full justify-start"
+                    className="w-full justify-start h-auto py-4"
                     onClick={() => setFormData({ ...formData, status: "draft" })}
                   >
-                    <SaveIcon className="h-4 w-4 mr-2" />
-                    <div className="flex flex-col items-start">
+                    <SaveIcon className="h-4 w-4 mr-3 flex-shrink-0" />
+                    <div className="flex flex-col items-start gap-0.5">
                       <span className="font-medium">Draft</span>
                       <span className="text-xs opacity-80">Work in progress</span>
                     </div>
