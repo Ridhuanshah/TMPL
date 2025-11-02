@@ -514,28 +514,37 @@ export function PackageEditFull() {
       }, 2500);
 
       // Delete existing related data first (MUST await to prevent race condition)
+      // WORKAROUND: Using fetch() instead of supabase client due to hanging issue
       if (id) {
-        console.log("🔄 Deleting old related data...");
+        console.log("🔄 Deleting old related data using REST API...");
         
         try {
-          // Delete and recreate related data with error handling
-          const deleteResults = await Promise.all([
-            supabase.from("daily_itinerary").delete().eq("package_id", id),
-            supabase.from("travel_tips").delete().eq("package_id", id),
-            supabase.from("essential_items").delete().eq("package_id", id),
-            supabase.from("package_departure_dates").delete().eq("package_id", id),
-          ]);
+          const supabaseUrl = import.meta.env.VITE_SUPABASE_PROJECT_URL;
+          const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+          const tables = ["daily_itinerary", "travel_tips", "essential_items", "package_departure_dates"];
           
-          // Log any errors
-          deleteResults.forEach((result, index) => {
-            const tables = ["daily_itinerary", "travel_tips", "essential_items", "package_departure_dates"];
-            if (result.error) {
-              console.error(`❌ Delete ${tables[index]} error:`, result.error);
-            } else {
-              console.log(`✅ Deleted from ${tables[index]}`);
-            }
-          });
+          // Use direct REST API calls with fetch (bypasses JS client hanging issue)
+          const deletePromises = tables.map(table => 
+            fetch(`${supabaseUrl}/rest/v1/${table}?package_id=eq.${id}`, {
+              method: 'DELETE',
+              headers: {
+                'apikey': supabaseKey,
+                'Authorization': `Bearer ${supabaseKey}`,
+                'Content-Type': 'application/json',
+                'Prefer': 'return=minimal'
+              }
+            }).then(response => {
+              if (response.ok) {
+                console.log(`✅ Deleted from ${table} via REST API`);
+                return { table, success: true };
+              } else {
+                console.error(`❌ Delete ${table} failed:`, response.status, response.statusText);
+                return { table, success: false, error: response.statusText };
+              }
+            })
+          );
           
+          await Promise.all(deletePromises);
           console.log("✅ Old related data deleted, ready to insert new data");
         } catch (deleteError) {
           console.error("❌ DELETE operation error:", deleteError);
