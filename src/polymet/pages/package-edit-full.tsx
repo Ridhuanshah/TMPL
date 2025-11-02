@@ -571,8 +571,20 @@ export function PackageEditFull() {
 
         if (itineraryData.length > 0) {
           console.log("➕ Inserting", itineraryData.length, "itinerary items");
-          const insertResult = await supabase.from("daily_itinerary").insert(itineraryData as any);
-          console.log("Insert itinerary result:", insertResult.error ? insertResult.error : "✅ Success");
+          // Use REST API instead of JS client to avoid hanging
+          const supabaseUrl = import.meta.env.VITE_SUPABASE_PROJECT_URL;
+          const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+          const insertResponse = await fetch(`${supabaseUrl}/rest/v1/daily_itinerary`, {
+            method: 'POST',
+            headers: {
+              'apikey': supabaseKey,
+              'Authorization': `Bearer ${supabaseKey}`,
+              'Content-Type': 'application/json',
+              'Prefer': 'return=minimal'
+            },
+            body: JSON.stringify(itineraryData)
+          });
+          console.log("Insert itinerary result:", insertResponse.ok ? "✅ Success" : `❌ Failed: ${insertResponse.statusText}`);
         } else {
           console.log("⏭️ No itinerary items to insert");
         }
@@ -594,8 +606,20 @@ export function PackageEditFull() {
 
         if (tipsData.length > 0) {
           console.log("➕ Inserting", tipsData.length, "travel tips");
-          const insertResult = await supabase.from("travel_tips").insert(tipsData as any);
-          console.log("Insert tips result:", insertResult.error ? insertResult.error : "✅ Success");
+          // Use REST API instead of JS client to avoid hanging
+          const supabaseUrl = import.meta.env.VITE_SUPABASE_PROJECT_URL;
+          const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+          const insertResponse = await fetch(`${supabaseUrl}/rest/v1/travel_tips`, {
+            method: 'POST',
+            headers: {
+              'apikey': supabaseKey,
+              'Authorization': `Bearer ${supabaseKey}`,
+              'Content-Type': 'application/json',
+              'Prefer': 'return=minimal'
+            },
+            body: JSON.stringify(tipsData)
+          });
+          console.log("Insert tips result:", insertResponse.ok ? "✅ Success" : `❌ Failed: ${insertResponse.statusText}`);
         } else {
           console.log("⏭️ No travel tips to insert");
         }
@@ -616,8 +640,20 @@ export function PackageEditFull() {
 
         if (itemsData.length > 0) {
           console.log("➕ Inserting", itemsData.length, "essential items");
-          const insertResult = await supabase.from("essential_items").insert(itemsData as any);
-          console.log("Insert items result:", insertResult.error ? insertResult.error : "✅ Success");
+          // Use REST API instead of JS client to avoid hanging
+          const supabaseUrl = import.meta.env.VITE_SUPABASE_PROJECT_URL;
+          const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+          const insertResponse = await fetch(`${supabaseUrl}/rest/v1/essential_items`, {
+            method: 'POST',
+            headers: {
+              'apikey': supabaseKey,
+              'Authorization': `Bearer ${supabaseKey}`,
+              'Content-Type': 'application/json',
+              'Prefer': 'return=minimal'
+            },
+            body: JSON.stringify(itemsData)
+          });
+          console.log("Insert items result:", insertResponse.ok ? "✅ Success" : `❌ Failed: ${insertResponse.statusText}`);
         } else {
           console.log("⏭️ No essential items to insert");
         }
