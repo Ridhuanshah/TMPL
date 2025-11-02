@@ -27,17 +27,22 @@ export function DateSelector({ packageId, selectedDateId, onSelect }: DateSelect
     setError('');
 
     try {
-      // TODO: Replace with actual Supabase query
-      // const { data, error } = await supabase
-      //   .from('package_departure_dates')
-      //   .select('*')
-      //   .eq('package_id', packageId)
-      //   .eq('status', 'active')
-      //   .gte('start_date', new Date().toISOString())
-      //   .order('start_date', { ascending: true });
+      // Import the service function
+      const { fetchDepartureDates: fetchDates } = await import('../../services/booking-service');
+      const { data, error: fetchError } = await fetchDates(packageId);
 
-      // Mock data for now
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      if (fetchError) {
+        throw new Error('Failed to load departure dates');
+      }
+
+      if (data && data.length > 0) {
+        setDepartureDates(data);
+        setLoading(false);
+        return;
+      }
+
+      // Fallback to mock data if no real data
+      await new Promise(resolve => setTimeout(resolve, 500));
       
       const mockDates: PackageDepartureDate[] = [
         {

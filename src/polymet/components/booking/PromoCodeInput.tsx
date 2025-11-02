@@ -30,37 +30,25 @@ export function PromoCodeInput({ onApply, onRemove }: PromoCodeInputProps) {
     setError('');
 
     try {
-      // TODO: Query Supabase for coupon
-      // For now, simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Import the service function
+      const { validateCoupon } = await import('../../services/booking-service');
+      
+      // Get current total for validation
+      const totalAmount = state.pricing.subtotal + state.pricing.addons_total;
+      
+      // Validate coupon with Supabase
+      const { data: coupon, error: validationError } = await validateCoupon(code, totalAmount);
 
-      // Mock coupon validation
-      if (code.toUpperCase() === 'WELCOME10') {
-        const mockCoupon: Coupon = {
-          id: '1',
-          code: 'WELCOME10',
-          name: 'Welcome 10% Off',
-          description: '10% discount for new customers',
-          type: 'percentage',
-          value: 10,
-          status: 'active',
-          conditions: {
-            minimum_amount: 1000,
-            maximum_discount: 500,
-          },
-          validity: {
-            start_date: '2025-01-01',
-            end_date: '2025-12-31',
-            timezone: 'Asia/Kuala_Lumpur',
-          },
-        };
-
-        applyCoupon(mockCoupon);
-        onApply?.(mockCoupon);
-        setCode('');
-      } else {
-        setError('Invalid promo code or code has expired');
+      if (validationError || !coupon) {
+        setError(validationError as string || 'Invalid promo code');
+        return;
       }
+
+      // Apply the valid coupon
+      applyCoupon(coupon);
+      onApply?.(coupon);
+      setCode('');
+      
     } catch (err) {
       setError('Failed to apply promo code. Please try again.');
     } finally {

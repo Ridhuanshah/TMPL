@@ -50,11 +50,29 @@ export function ReviewPaymentStep({ packageName }: ReviewPaymentStepProps) {
     setError('');
 
     try {
-      // TODO: Submit booking to Supabase
-      console.log('Submitting booking...', state);
+      // Import the service function
+      const { submitBooking } = await import('../../../services/booking-service');
+      const { supabase } = await import('../../../../lib/supabase');
       
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Get current user ID (you might need to get this from auth context)
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        setError('You must be logged in to complete booking');
+        return;
+      }
+      
+      // Submit booking to Supabase
+      const result = await submitBooking(state, user.id);
+      
+      if (!result.success || !result.booking_number) {
+        setError(result.error || 'Failed to submit booking');
+        return;
+      }
+      
+      // Update state with booking details
+      // (You might want to add these to BookingContext)
+      console.log('Booking successful!', result);
       
       // Move to confirmation step
       completeStep(4);

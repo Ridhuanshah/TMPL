@@ -31,22 +31,27 @@ export function AddonsSelector({ packageId, participants, selectedAddons, onAddo
     setError('');
 
     try {
-      // TODO: Replace with actual Supabase queries
-      // const { data: addons } = await supabase
-      //   .from('package_addons')
-      //   .select('*')
-      //   .eq('package_id', packageId)
-      //   .eq('is_active', true)
-      //   .order('display_order');
-      
-      // const { data: items } = await supabase
-      //   .from('daily_itinerary')
-      //   .select('*')
-      //   .eq('package_id', packageId)
-      //   .eq('is_optional', true);
+      // Import the service functions
+      const {
+        fetchPackageAddons,
+        fetchOptionalItineraryItems
+      } = await import('../../services/booking-service');
 
-      // Mock data for now
-      await new Promise(resolve => setTimeout(resolve, 800));
+      // Fetch real data
+      const [addonsResult, itemsResult] = await Promise.all([
+        fetchPackageAddons(packageId),
+        fetchOptionalItineraryItems(packageId)
+      ]);
+
+      if (addonsResult.data || itemsResult.data) {
+        setPackageAddons(addonsResult.data || []);
+        setOptionalItems(itemsResult.data || []);
+        setLoading(false);
+        return;
+      }
+
+      // Fallback to mock data if no real data
+      await new Promise(resolve => setTimeout(resolve, 500));
 
       const mockAddons: PackageAddon[] = [
         {
