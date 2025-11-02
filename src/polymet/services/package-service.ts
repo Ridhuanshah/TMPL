@@ -1,6 +1,7 @@
-// Package Service - Abstraction layer for database access
-// Switch between mock DB and real Supabase by changing one line
+// Package Service - NOW USING REAL SUPABASE DATA!
+// Switched from mock database to production Supabase
 
+import { supabase } from '../../lib/supabase';
 import { mockDb } from './mock-database';
 import {
   PackageWithRelations,
@@ -9,41 +10,53 @@ import {
   PaginatedResponse,
 } from './database.types';
 
-// TODO: When Supabase is ready, import and use real client:
-// import { supabase } from './supabase-client';
-
 class PackageService {
   // Get single package by ID
   async getById(id: string): Promise<PackageWithRelations | null> {
-    // Using mock database
-    return mockDb.getPackageById(id);
+    try {
+      const { data, error } = await supabase
+        .from('packages')
+        .select(`
+          *,
+          daily_itinerary(*),
+          package_images(*),
+          travel_tips(*),
+          essential_items(*)
+        `)
+        .eq('id', id)
+        .single();
 
-    // TODO: Replace with Supabase:
-    // const { data, error } = await supabase
-    //   .from('packages')
-    //   .select(`
-    //     *,
-    //     daily_itinerary(*),
-    //     images(*),
-    //     travel_tips(*),
-    //     essential_items(*)
-    //   `)
-    //   .eq('id', id)
-    //   .single();
-    // return data;
+      if (error) throw error;
+      return data as any;
+    } catch (error) {
+      console.error('Error fetching package by ID:', error);
+      // Fallback to mock only if Supabase fails
+      return mockDb.getPackageById(id);
+    }
   }
 
   // Get single package by slug (SEO-friendly URLs)
   async getBySlug(slug: string): Promise<PackageWithRelations | null> {
-    return mockDb.getPackageBySlug(slug);
+    try {
+      const { data, error } = await supabase
+        .from('packages')
+        .select(`
+          *,
+          daily_itinerary(*),
+          package_images(*),
+          travel_tips(*),
+          essential_items(*)
+        `)
+        .eq('slug', slug)
+        .single();
 
-    // TODO: Replace with Supabase:
-    // const { data } = await supabase
-    //   .from('packages')
-    //   .select(`*, daily_itinerary(*), images(*), travel_tips(*), essential_items(*)`)
-    //   .eq('slug', slug)
-    //   .single();
-    // return data;
+      if (error) throw error;
+      return data as any;
+    } catch (error) {
+      console.error('Error fetching package by slug:', error);
+      // Fallback to mock only if Supabase fails
+      return mockDb.getPackageBySlug(slug);
+    }
   }
 
   // Get packages with filters and pagination
@@ -51,35 +64,136 @@ class PackageService {
     filters?: PackageFilters,
     pagination?: PaginationParams
   ): Promise<PaginatedResponse<PackageWithRelations>> {
-    return mockDb.getPackages(filters, pagination);
+    try {
+      let query = supabase
+        .from('packages')
+        .select(`
+          *,
+          daily_itinerary(*),
+          package_images(*),
+          travel_tips(*),
+          essential_items(*)
+        `, { count: 'exact' });
 
-    // TODO: Replace with Supabase:
-    // Build query with filters, pagination
+      // Apply filters
+      if (filters?.status) {
+        query = query.eq('status', filters.status);
+      }
+      if (filters?.continent) {
+        query = query.eq('continent', filters.continent);
+      }
+      if (filters?.category) {
+        query = query.eq('category', filters.category);
+      }
+
+      // Apply pagination
+      const page = pagination?.page || 1;
+      const limit = pagination?.limit || 10;
+      const from = (page - 1) * limit;
+      const to = from + limit - 1;
+
+      query = query.range(from, to);
+
+      const { data, error, count } = await query;
+
+      if (error) throw error;
+
+      return {
+        data: (data || []) as any,
+        total: count || 0,
+        page,
+        limit,
+        total_pages: Math.ceil((count || 0) / limit),
+      };
+    } catch (error) {
+      console.error('Error fetching packages:', error);
+      return mockDb.getPackages(filters, pagination);
+    }
   }
 
   // Get packages by continent
   async getByContinent(continent: string): Promise<PackageWithRelations[]> {
-    return mockDb.getPackagesByContinent(continent);
+    try {
+      const { data, error } = await supabase
+        .from('packages')
+        .select(`*,daily_itinerary(*),package_images(*),travel_tips(*),essential_items(*)`)
+        .eq('continent', continent)
+        .eq('status', 'active');
+
+      if (error) throw error;
+      return (data || []) as any;
+    } catch (error) {
+      console.error('Error fetching packages by continent:', error);
+      return mockDb.getPackagesByContinent(continent);
+    }
   }
 
   // Get packages by category
   async getByCategory(category: string): Promise<PackageWithRelations[]> {
-    return mockDb.getPackagesByCategory(category);
+    try {
+      const { data, error } = await supabase
+        .from('packages')
+        .select(`*,daily_itinerary(*),package_images(*),travel_tips(*),essential_items(*)`)
+        .eq('category', category)
+        .eq('status', 'active');
+
+      if (error) throw error;
+      return (data || []) as any;
+    } catch (error) {
+      console.error('Error fetching packages by category:', error);
+      return mockDb.getPackagesByCategory(category);
+    }
   }
 
   // Get featured packages for homepage
   async getFeatured(limit: number = 6): Promise<PackageWithRelations[]> {
-    return mockDb.getFeaturedPackages(limit);
+    try {
+      const { data, error } = await supabase
+        .from('packages')
+        .select(`*,daily_itinerary(*),package_images(*),travel_tips(*),essential_items(*)`)
+        .eq('status', 'active')
+        .order('average_rating', { ascending: false })
+        .limit(limit);
+
+      if (error) throw error;
+      return (data || []) as any;
+    } catch (error) {
+      console.error('Error fetching featured packages:', error);
+      return mockDb.getFeaturedPackages(limit);
+    }
   }
 
   // Search packages
   async search(query: string): Promise<PackageWithRelations[]> {
-    return mockDb.searchPackages(query);
+    try {
+      const { data, error } = await supabase
+        .from('packages')
+        .select(`*,daily_itinerary(*),package_images(*),travel_tips(*),essential_items(*)`)
+        .or(`name.ilike.%${query}%,description.ilike.%${query}%,country.ilike.%${query}%`)
+        .eq('status', 'active');
+
+      if (error) throw error;
+      return (data || []) as any;
+    } catch (error) {
+      console.error('Error searching packages:', error);
+      return mockDb.searchPackages(query);
+    }
   }
 
   // Get all packages (for admin)
   async getAllForAdmin(): Promise<PackageWithRelations[]> {
-    return mockDb.getAllPackages();
+    try {
+      const { data, error } = await supabase
+        .from('packages')
+        .select(`*,daily_itinerary(*),package_images(*),travel_tips(*),essential_items(*)`)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      return (data || []) as any;
+    } catch (error) {
+      console.error('Error fetching all packages for admin:', error);
+      return mockDb.getAllPackages();
+    }
   }
 }
 
