@@ -332,7 +332,7 @@ export function PackageFormTabs({
         onValueChange={setActiveTab}
         className="space-y-6"
       >
-        <TabsList className="grid w-full grid-cols-3 lg:grid-cols-9 h-auto p-1">
+        <TabsList className="flex flex-wrap justify-start w-full h-auto p-1 gap-1">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const status = getTabCompletionStatus(tab);
@@ -341,7 +341,7 @@ export function PackageFormTabs({
               <TabsTrigger
                 key={tab.id}
                 value={tab.id}
-                className="flex flex-col items-center space-y-1 p-3 h-auto relative"
+                className="flex flex-col items-center space-y-1 p-3 h-auto relative flex-1 min-w-[100px]"
               >
                 <div className="flex items-center space-x-1">
                   <Icon className="h-4 w-4" />

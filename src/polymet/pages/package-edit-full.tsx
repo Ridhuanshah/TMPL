@@ -8,6 +8,8 @@ import {
   EyeIcon,
   Loader2Icon,
   CheckCircleIcon,
+  GlobeIcon,
+  EyeOffIcon,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/lib/supabase";
@@ -792,12 +794,77 @@ export function PackageEditFull() {
               travelTips={travelTips}
               onTravelTipsChange={setTravelTips}
               errors={errors}
+              isEditing={true}
             />
           </div>
 
           {/* Sidebar Status */}
           <div className="lg:col-span-1 space-y-6">
-            {/* Package status info can go here if needed */}
+            {/* Package Visibility Status */}
+            <Card>
+              <CardContent className="p-6 space-y-4">
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">Package Visibility</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Control whether this package is shown on the customer website
+                  </p>
+                </div>
+
+                <div className="space-y-3">
+                  <Button
+                    type="button"
+                    variant={formData.status === "active" ? "default" : "outline"}
+                    className="w-full justify-start"
+                    onClick={() => setFormData({ ...formData, status: "active" })}
+                  >
+                    <GlobeIcon className="h-4 w-4 mr-2" />
+                    <div className="flex flex-col items-start">
+                      <span className="font-medium">Active</span>
+                      <span className="text-xs opacity-80">Visible on homepage</span>
+                    </div>
+                  </Button>
+
+                  <Button
+                    type="button"
+                    variant={formData.status === "inactive" ? "default" : "outline"}
+                    className="w-full justify-start"
+                    onClick={() => setFormData({ ...formData, status: "inactive" })}
+                  >
+                    <EyeOffIcon className="h-4 w-4 mr-2" />
+                    <div className="flex flex-col items-start">
+                      <span className="font-medium">Inactive</span>
+                      <span className="text-xs opacity-80">Hidden from homepage</span>
+                    </div>
+                  </Button>
+
+                  <Button
+                    type="button"
+                    variant={formData.status === "draft" ? "default" : "outline"}
+                    className="w-full justify-start"
+                    onClick={() => setFormData({ ...formData, status: "draft" })}
+                  >
+                    <SaveIcon className="h-4 w-4 mr-2" />
+                    <div className="flex flex-col items-start">
+                      <span className="font-medium">Draft</span>
+                      <span className="text-xs opacity-80">Work in progress</span>
+                    </div>
+                  </Button>
+                </div>
+
+                <div className="pt-3 border-t">
+                  <div className="flex items-center space-x-2">
+                    <div className={`w-2 h-2 rounded-full ${
+                      formData.status === "active" ? "bg-green-500" : 
+                      formData.status === "inactive" ? "bg-gray-400" : 
+                      "bg-yellow-500"
+                    }`}></div>
+                    <span className="text-sm font-medium capitalize">
+                      {formData.status || "draft"}
+                    </span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </form>
