@@ -571,14 +571,14 @@ export function PackageEditFull() {
 
         if (itineraryData.length > 0) {
           console.log("➕ Inserting", itineraryData.length, "itinerary items");
-          // Use REST API instead of JS client to avoid hanging
+          // Use REST API instead of JS client to avoid hanging - with proper auth
           const supabaseUrl = import.meta.env.VITE_SUPABASE_PROJECT_URL;
           const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
           const insertResponse = await fetch(`${supabaseUrl}/rest/v1/daily_itinerary`, {
             method: 'POST',
             headers: {
               'apikey': supabaseKey,
-              'Authorization': `Bearer ${supabaseKey}`,
+              'Authorization': `Bearer ${accessToken}`,  // Use user's session token for RLS
               'Content-Type': 'application/json',
               'Prefer': 'return=minimal'
             },
@@ -606,14 +606,14 @@ export function PackageEditFull() {
 
         if (tipsData.length > 0) {
           console.log("➕ Inserting", tipsData.length, "travel tips");
-          // Use REST API instead of JS client to avoid hanging
+          // Use REST API instead of JS client to avoid hanging - with proper auth
           const supabaseUrl = import.meta.env.VITE_SUPABASE_PROJECT_URL;
           const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
           const insertResponse = await fetch(`${supabaseUrl}/rest/v1/travel_tips`, {
             method: 'POST',
             headers: {
               'apikey': supabaseKey,
-              'Authorization': `Bearer ${supabaseKey}`,
+              'Authorization': `Bearer ${accessToken}`,  // Use user's session token for RLS
               'Content-Type': 'application/json',
               'Prefer': 'return=minimal'
             },
@@ -640,14 +640,14 @@ export function PackageEditFull() {
 
         if (itemsData.length > 0) {
           console.log("➕ Inserting", itemsData.length, "essential items");
-          // Use REST API instead of JS client to avoid hanging
+          // Use REST API instead of JS client to avoid hanging - with proper auth
           const supabaseUrl = import.meta.env.VITE_SUPABASE_PROJECT_URL;
           const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
           const insertResponse = await fetch(`${supabaseUrl}/rest/v1/essential_items`, {
             method: 'POST',
             headers: {
               'apikey': supabaseKey,
-              'Authorization': `Bearer ${supabaseKey}`,
+              'Authorization': `Bearer ${accessToken}`,  // Use user's session token for RLS
               'Content-Type': 'application/json',
               'Prefer': 'return=minimal'
             },
