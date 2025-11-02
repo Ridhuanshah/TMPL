@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
 import { Calendar, Users, ChevronRight } from 'lucide-react';
 import { useBooking } from '../../../contexts/BookingContext';
 import { Button } from '../../../../components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../../../components/ui/card';
+import { DateSelector } from '../DateSelector';
+import type { PackageDepartureDate } from '../../../types/booking.types';
 
 interface DateParticipantsStepProps {
   packageId: string;
@@ -10,14 +11,10 @@ interface DateParticipantsStepProps {
 
 export function DateParticipantsStep({ packageId }: DateParticipantsStepProps) {
   const { state, setPackageAndDate, setParticipants, nextStep, completeStep } = useBooking();
-  const [departureDates, setDepartureDates] = useState([]);
-  const [loading, setLoading] = useState(true);
 
-  // TODO: Fetch departure dates from Supabase
-  useEffect(() => {
-    // Placeholder - will implement in next iteration
-    setLoading(false);
-  }, [packageId]);
+  const handleDateSelect = (date: PackageDepartureDate) => {
+    setPackageAndDate(packageId, date);
+  };
 
   const handleContinue = () => {
     if (state.departure_date && state.participants > 0) {
@@ -39,28 +36,11 @@ export function DateParticipantsStep({ packageId }: DateParticipantsStepProps) {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {loading ? (
-            <div className="text-center py-8">
-              <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent"></div>
-              <p className="mt-2 text-sm text-gray-500">Loading available dates...</p>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {/* Date selection grid will go here */}
-              <p className="text-sm text-gray-500">
-                🚧 Date selector component coming next
-              </p>
-              
-              {state.departure_date && (
-                <div className="p-4 bg-blue-50 rounded-lg">
-                  <p className="text-sm font-medium text-blue-900">
-                    Selected: {new Date(state.departure_date.start_date).toLocaleDateString()} - 
-                    {new Date(state.departure_date.end_date).toLocaleDateString()}
-                  </p>
-                </div>
-              )}
-            </div>
-          )}
+          <DateSelector
+            packageId={packageId}
+            selectedDateId={state.departure_date_id || undefined}
+            onSelect={handleDateSelect}
+          />
         </CardContent>
       </Card>
 
