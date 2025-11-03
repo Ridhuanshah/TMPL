@@ -153,8 +153,8 @@ export function CustomerFooter({ className = "" }: CustomerFooterProps) {
           <div className="space-y-4">
             <h4 className="text-xl font-bold text-black">Secured Payment</h4>
             <img 
-              src="/ipay88_1.png" 
-              alt="Payment Methods - We accept Visa, Mastercard, American Express, PayPal, and Bank Transfer"
+              src="/chip-payment.png" 
+              alt="Payment Methods - Maybank, AmBank, BSN, RHB, Public Bank, OCBC, HSBC, CIMB, Alliance Bank, Affin Bank, iPay88, Visa, Mastercard, FPX and more"
               className="w-full max-w-md"
             />
           </div>
