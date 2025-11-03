@@ -24,7 +24,7 @@ export const travelerSchema = z.object({
   gender: z.enum(['male', 'female', 'other'], {
     errorMap: () => ({ message: 'Please select a gender' })
   }),
-  passport_number: z.string().min(5, 'Passport number is required').max(50),
+  passport_number: z.string().optional(), // Made optional since we removed duplicate field
   emergency_contact_name: z.string().min(2, 'Emergency contact name is required').max(100),
   emergency_contact_relation: z.string().min(2, 'Relationship is required').max(50),
   emergency_contact_phone: z.string().min(8, 'Emergency contact phone is required').max(20),
