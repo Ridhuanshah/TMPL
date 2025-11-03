@@ -258,10 +258,21 @@ export function CustomerPackageDetails() {
                   <Button
                     size="lg"
                     className="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold text-lg px-8"
+                    asChild
                   >
-                    Book This Package
+                    <Link to={`/packages/${pkg.slug}/book`}>
+                      Book This Package
+                    </Link>
                   </Button>
-                  <Button size="lg" variant="outline" className="text-lg px-8">
+                  <Button 
+                    size="lg" 
+                    variant="outline" 
+                    className="text-lg px-8"
+                    onClick={() => {
+                      const element = document.getElementById('package-description');
+                      element?.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                  >
                     Read More
                   </Button>
                 </div>
@@ -271,7 +282,7 @@ export function CustomerPackageDetails() {
         </motion.div>
 
         {/* Introduction Section */}
-        <section className="mt-16 md:mt-24">
+        <section id="package-description" className="mt-16 md:mt-24">
           <div className="max-w-4xl mx-auto text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
               About This Trip
@@ -580,8 +591,11 @@ export function CustomerPackageDetails() {
             <Button
               size="lg"
               className="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold text-lg px-12"
+              asChild
             >
-              Get A Quote
+              <Link to={`/packages/${pkg.slug}/book`}>
+                Book This Trip Now
+              </Link>
             </Button>
           </div>
         </section>

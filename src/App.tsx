@@ -16,6 +16,7 @@ import { HowItWorksPage } from "@/polymet/pages/how-it-works";
 import { BlogPage } from "@/polymet/pages/blog";
 import { BlogPostPage } from "@/polymet/pages/blog-post";
 import { CustomerPackageDetails } from "@/polymet/pages/customer-package-details";
+import { CustomerBookingPage } from "@/polymet/pages/customer-booking";
 import { CookieSettingsPage } from "@/polymet/pages/cookie-settings";
 import { PrivacyPolicyPage } from "@/polymet/pages/privacy-policy";
 import { TermsOfServicePage } from "@/polymet/pages/terms-of-service";
@@ -106,6 +107,16 @@ export default function AdminDashboard() {
             element={
               <CustomerLayout>
                 <CustomerPackageDetails />
+              </CustomerLayout>
+            }
+          />
+
+          {/* Booking Wizard Page */}
+          <Route
+            path="/packages/:slug/book"
+            element={
+              <CustomerLayout>
+                <CustomerBookingPage />
               </CustomerLayout>
             }
           />
