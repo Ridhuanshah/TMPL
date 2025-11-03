@@ -572,7 +572,7 @@ export function PackageManagement() {
                         asChild
                       >
                         <Link 
-                          to={`/packages/${pkg.id}`}
+                          to={`/packages/${pkg.slug}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           title="View customer page"
