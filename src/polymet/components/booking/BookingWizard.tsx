@@ -26,17 +26,18 @@ export function BookingWizard({ packageId, packageName, packageSlug }: BookingWi
   }, [restoreFromLocalStorage]);
 
   // Warn before leaving with unsaved changes
-  useEffect(() => {
-    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      if (state.current_step > 1 && state.current_step < 5) {
-        e.preventDefault();
-        e.returnValue = 'You have an incomplete booking. Are you sure you want to leave?';
-      }
-    };
+  // DISABLED: This blocks redirects to payment gateways
+  // useEffect(() => {
+  //   const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+  //     if (state.current_step > 1 && state.current_step < 5) {
+  //       e.preventDefault();
+  //       e.returnValue = 'You have an incomplete booking. Are you sure you want to leave?';
+  //     }
+  //   };
 
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
-  }, [state.current_step]);
+  //   window.addEventListener('beforeunload', handleBeforeUnload);
+  //   return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  // }, [state.current_step]);
 
   // Render current step
   const renderStep = () => {
