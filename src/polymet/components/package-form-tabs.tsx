@@ -804,6 +804,24 @@ export function PackageFormTabs({
                   Add Gallery Image
                 </Button>
               </div>
+
+              <div className="space-y-2 pt-4 border-t">
+                <Label htmlFor="pdfItinerary">3D PDF Itinerary (Optional)</Label>
+                <p className="text-sm text-gray-500">
+                  Upload a PDF file that will be displayed as an interactive 3D flipbook for customers
+                </p>
+                <Input
+                  id="pdfItinerary"
+                  value={formData.pdfItinerary || ""}
+                  onChange={(e) =>
+                    onFormDataChange({ ...formData, pdfItinerary: e.target.value })
+                  }
+                  placeholder="https://example.com/itinerary.pdf"
+                />
+                <p className="text-xs text-gray-400">
+                  💡 Tip: Upload your PDF to a cloud storage service (Google Drive, Dropbox, etc.) and paste the public URL here
+                </p>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>

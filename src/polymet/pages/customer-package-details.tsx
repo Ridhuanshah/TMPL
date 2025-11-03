@@ -540,52 +540,6 @@ export function CustomerPackageDetails() {
           </section>
         )}
 
-        {/* Travel Tips */}
-        {pkg.travel_tips && pkg.travel_tips.length > 0 && (
-          <section className="mt-16 md:mt-24 bg-blue-50 -mx-4 px-4 py-12 md:py-16">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-                Travel Tips
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {pkg.travel_tips.map((tip, index) => (
-                  <Card key={tip.id}>
-                    <CardContent className="p-6">
-                      <h3 className="font-bold text-lg mb-2">{tip.title}</h3>
-                      <p className="text-gray-700">{tip.description}</p>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* Essential Items */}
-        {pkg.essential_items && pkg.essential_items.length > 0 && (
-          <section className="mt-16 md:mt-24">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-                Essential Items to Bring
-              </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                {pkg.essential_items.map((item, index) => (
-                  <motion.div
-                    key={item.id}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.3, delay: index * 0.05 }}
-                    viewport={{ once: true }}
-                    className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg"
-                  >
-                    <Check className="w-5 h-5 text-green-600 flex-shrink-0" />
-                    <span className="text-gray-700 font-medium">{item.item_name}</span>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
 
         {/* Booking CTA Section */}
         <section className="mt-16 md:mt-24 bg-gray-900 -mx-4 px-4 py-12 md:py-16 text-white">
