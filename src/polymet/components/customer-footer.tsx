@@ -74,6 +74,39 @@ export function CustomerFooter({ className = "" }: CustomerFooterProps) {
         </div>
       </div>
 
+      {/* Certifications Section */}
+      <div className="border-b border-yellow-600/30">
+        <div className="container mx-auto px-6 py-8">
+          <div className="flex flex-col md:flex-row items-center gap-6">
+            <h3 className="text-xl font-bold text-black whitespace-nowrap">
+              In Collaboration With
+            </h3>
+            <div className="flex flex-wrap items-center justify-center gap-6 md:gap-8">
+              <img 
+                src="/Malaysian-Association-of-Tour-and-Travel-Agents-MATTA.png" 
+                alt="MATTA - Malaysian Association of Tour and Travel Agents"
+                className="h-12 object-contain"
+              />
+              <img 
+                src="/ministry-of-tourism.webp" 
+                alt="Ministry of Tourism Malaysia"
+                className="h-12 object-contain"
+              />
+              <img 
+                src="/IATA.webp" 
+                alt="IATA - International Air Transport Association"
+                className="h-12 object-contain"
+              />
+              <img 
+                src="/ssl.webp" 
+                alt="SSL Secure - Secure Website"
+                className="h-12 object-contain"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Main Footer Content */}
       <div className="container mx-auto px-6 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
