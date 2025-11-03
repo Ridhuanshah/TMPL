@@ -150,12 +150,28 @@ export function PackageForm() {
 
   // Load existing package data if editing
   useEffect(() => {
-    if (isEditing && id) {
-      const existingPackage = travelPackages.find((pkg) => pkg.id === id);
-      if (existingPackage) {
-        setFormData(existingPackage);
+    const loadPackage = async () => {
+      if (isEditing && id) {
+        try {
+          const existingPackage = await packageService.getById(id);
+          if (existingPackage) {
+            // Load package data from Supabase
+            setFormData(existingPackage as any);
+            console.log('Loaded package from Supabase:', existingPackage);
+            console.log('PDF Itinerary URL:', existingPackage.pdfItinerary);
+          }
+        } catch (error) {
+          console.error('Error loading package:', error);
+          // Fallback to mock data
+          const existingPackage = travelPackages.find((pkg) => pkg.id === id);
+          if (existingPackage) {
+            setFormData(existingPackage);
+          }
+        }
       }
-    }
+    };
+    
+    loadPackage();
   }, [id, isEditing]);
 
   const handleInputChange = (field: string, value: any) => {
