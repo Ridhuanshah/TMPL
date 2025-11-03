@@ -114,44 +114,24 @@ export function ReviewPaymentStep({ packageName }: ReviewPaymentStepProps) {
       const { submitBooking } = await import('../../../services/booking-service');
       const { supabase } = await import('../../../../lib/supabase');
       
-      // SIMPLIFIED: No account registration, create guest user record with proper UUID
+      // SIMPLIFIED: No account registration, create guest user via RPC (bypasses RLS)
       console.log('✅ Processing as guest booking for:', email);
       
-      // Create or get guest user record in database
-      const { data: existingUser } = await supabase
-        .from('users')
-        .select('id')
-        .eq('email', email)
-        .single();
+      // Create or get guest user using server function (bypasses RLS)
+      const { data: userId, error: userError } = await supabase
+        .rpc('create_guest_user', {
+          p_email: email,
+          p_name: `${leadTraveler.first_name} ${leadTraveler.last_name}`,
+          p_phone: leadTraveler.phone
+        });
       
-      let userId: string;
-      
-      if (existingUser) {
-        userId = existingUser.id;
-        console.log('✅ Using existing user:', userId);
-      } else {
-        // Create new guest user with proper UUID
-        const { data: newUser, error: userError } = await supabase
-          .from('users')
-          .insert({
-            email: email,
-            name: `${leadTraveler.first_name} ${leadTraveler.last_name}`,
-            phone: leadTraveler.phone,
-            role: 'customer',
-            status: 'active'
-          })
-          .select('id')
-          .single();
-        
-        if (userError || !newUser) {
-          console.error('Failed to create user:', userError);
-          setError('Failed to create user record. Please try again.');
-          return;
-        }
-        
-        userId = newUser.id;
-        console.log('✅ Created new guest user:', userId);
+      if (userError || !userId) {
+        console.error('Failed to create user:', userError);
+        setError('Failed to create user record. Please try again.');
+        return;
       }
+      
+      console.log('✅ Guest user created/retrieved:', userId);
       
       // Submit booking to Supabase
       const result = await submitBooking(state, userId);
