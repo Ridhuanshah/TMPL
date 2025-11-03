@@ -124,8 +124,7 @@ export function CustomerFooter({ className = "" }: CustomerFooterProps) {
             <h4 className="text-xl font-bold text-black">Working Hours</h4>
             <div className="space-y-2 text-sm text-black/80">
               <p>{footerData.workingHours.weekdays}</p>
-              <p>{footerData.workingHours.saturday}</p>
-              <p>{footerData.workingHours.sunday}</p>
+              <p>{footerData.workingHours.weekend}</p>
             </div>
             <div className="pt-4">
               <h5 className="font-semibold text-black mb-3">Follow Us</h5>

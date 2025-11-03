@@ -368,9 +368,9 @@ export const footerData = {
     title: "About",
     description:
       "TMPL Escapade is a boutique travel agency specializing in unforgettable adventures across the globe.",
-    address: "123 Travel Street, Kuala Lumpur, Malaysia",
-    phone: "+60 3-1234 5678",
-    email: "info@tmplescapade.my",
+    address: "Pusat Perdagangan Hillpark, Bandar Puncak Alam, 42300, Puncak Alam, Selangor",
+    phone: "019-8816388",
+    email: "hi@tmplescapade.my",
   },
   quickLinks: [
     { label: "Home", href: "/" },
@@ -383,9 +383,8 @@ export const footerData = {
   ],
 
   workingHours: {
-    weekdays: "Monday - Friday: 9:00 AM - 6:00 PM",
-    saturday: "Saturday: 9:00 AM - 1:00 PM",
-    sunday: "Sunday: Closed",
+    weekdays: "Mon - Fri: 9:00 AM - 6:00 PM",
+    weekend: "Sat - Sun: 8:00 AM - 4:00 PM",
   },
   socialMedia: [
     {

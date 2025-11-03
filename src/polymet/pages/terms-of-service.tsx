@@ -294,10 +294,10 @@ export function TermsOfServicePage() {
             <p><strong>TMPL ESCAPADE & TOURS SDN. BHD.</strong></p>
             <p>Company Registration No: 1522397X / 202301028474</p>
             <p>Tourism License No: KPL/LN 1234</p>
-            <p className="mt-3">123 Travel Street, Kuala Lumpur, Malaysia</p>
-            <p>Email: <a href="mailto:info@tmplescapade.my" className="text-yellow-600 hover:text-yellow-700 underline">info@tmplescapade.my</a></p>
-            <p>Phone: <a href="tel:+60312345678" className="text-yellow-600 hover:text-yellow-700 underline">+60 3-1234 5678</a></p>
-            <p>Operating Hours: Monday - Friday, 9:00 AM - 6:00 PM (GMT+8)</p>
+            <p className="mt-3">Pusat Perdagangan Hillpark, Bandar Puncak Alam, 42300, Puncak Alam, Selangor</p>
+            <p>Email: <a href="mailto:hi@tmplescapade.my" className="text-yellow-600 hover:text-yellow-700 underline">hi@tmplescapade.my</a></p>
+            <p>Phone: <a href="tel:+60198816388" className="text-yellow-600 hover:text-yellow-700 underline">019-8816388</a></p>
+            <p>Operating Hours: Mon-Fri: 9:00 AM - 6:00 PM, Sat-Sun: 8:00 AM - 4:00 PM (GMT+8)</p>
           </div>
         </div>
 
