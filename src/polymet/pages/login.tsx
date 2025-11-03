@@ -11,7 +11,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import {
   LogIn,
@@ -21,7 +20,6 @@ import {
   Loader2,
   ArrowLeft,
 } from "lucide-react";
-import { supabaseDemoUsers } from "@/polymet/data/supabase-demo-users";
 
 export function Login() {
   const navigate = useNavigate();
@@ -61,29 +59,9 @@ export function Login() {
     }
   };
 
-  const handleQuickLogin = async (userEmail: string, userPassword: string) => {
-    setEmail(userEmail);
-    setPassword(userPassword);
-    setError("");
-    setIsLoading(true);
-
-    try {
-      const result = await login(userEmail, userPassword);
-
-      if (!result.success) {
-        setError(result.message || "Login failed. Please try again.");
-      }
-      // Navigation will be handled by useEffect when isAuthenticated changes
-    } catch (err) {
-      setError("An unexpected error occurred. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4">
-      <div className="w-full max-w-6xl space-y-4">
+      <div className="w-full max-w-md space-y-4">
         {/* Back to Homepage Link */}
         <div className="flex justify-start">
           <Button
@@ -97,9 +75,8 @@ export function Login() {
           </Button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Login Form */}
-          <Card className="shadow-xl">
+        {/* Login Form - Centered */}
+        <Card className="shadow-xl">
             <CardHeader className="space-y-3">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center">
@@ -187,55 +164,6 @@ export function Login() {
               </form>
             </CardContent>
           </Card>
-
-          {/* Demo Credentials */}
-          <Card className="shadow-xl">
-            <CardHeader>
-              <CardTitle className="text-xl">Demo Credentials</CardTitle>
-              <CardDescription>
-                Click any user below to quick login (Demo purposes only)
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3 max-h-[500px] overflow-y-auto pr-2">
-                {supabaseDemoUsers.map((user) => (
-                  <button
-                    key={user.id}
-                    onClick={() => handleQuickLogin(user.email, user.password)}
-                    disabled={isLoading}
-                    className="w-full text-left p-4 border border-border rounded-lg hover:bg-accent hover:border-primary transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="flex items-center gap-3 flex-1 min-w-0">
-                        <img
-                          src={user.avatar}
-                          alt={user.name}
-                          className="w-10 h-10 rounded-full flex-shrink-0"
-                        />
-
-                        <div className="flex-1 min-w-0">
-                          <p className="font-semibold truncate">{user.name}</p>
-                          <p className="text-sm text-muted-foreground truncate">
-                            {user.email}
-                          </p>
-                        </div>
-                      </div>
-                      <Badge variant="outline" className="flex-shrink-0">
-                        {user.displayRole}
-                      </Badge>
-                    </div>
-                    <div className="mt-2 pt-2 border-t border-border">
-                      <p className="text-xs text-muted-foreground">
-                        Password:{" "}
-                        <span className="font-mono">{user.password}</span>
-                      </p>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
       </div>
     </div>
   );
