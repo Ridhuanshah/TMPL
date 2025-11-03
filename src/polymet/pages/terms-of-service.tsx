@@ -213,7 +213,7 @@ export function TermsOfServicePage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-gray-50 py-12 pt-32">
       <div className="container mx-auto px-6 max-w-4xl">
         {/* Header */}
         <div className="bg-white rounded-lg shadow-sm p-8 mb-6">
