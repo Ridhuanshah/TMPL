@@ -184,7 +184,7 @@ export async function submitBooking(bookingState: BookingState, customerId: stri
     const { data: bookingNumberData, error: bookingNumberError } = await supabase
       // @ts-ignore
       .rpc('get_next_booking_number', {
-        p_package_id: bookingState.package_id,
+        p_package_id: String(bookingState.package_id),
         p_departure_date: bookingState.departure_date?.start_date
       });
 
