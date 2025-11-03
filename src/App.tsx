@@ -15,6 +15,7 @@ import { HowItWorksPage } from "@/polymet/pages/how-it-works";
 import { BlogPage } from "@/polymet/pages/blog";
 import { BlogPostPage } from "@/polymet/pages/blog-post";
 import { CustomerPackageDetails } from "@/polymet/pages/customer-package-details";
+import { CookieSettingsPage } from "@/polymet/pages/cookie-settings";
 import { DashboardOverview } from "@/polymet/pages/dashboard-overview";
 import { PackageManagement } from "@/polymet/pages/package-management";
 import { PackageForm } from "@/polymet/pages/package-form";
@@ -100,6 +101,16 @@ export default function AdminDashboard() {
             element={
               <CustomerLayout>
                 <CustomerPackageDetails />
+              </CustomerLayout>
+            }
+          />
+
+          {/* Cookie Settings Page */}
+          <Route
+            path="/cookie-settings"
+            element={
+              <CustomerLayout>
+                <CookieSettingsPage />
               </CustomerLayout>
             }
           />

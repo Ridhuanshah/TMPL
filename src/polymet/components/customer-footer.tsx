@@ -169,9 +169,12 @@ export function CustomerFooter({ className = "" }: CustomerFooterProps) {
               © {new Date().getFullYear()} TMPL Escapade. All rights reserved.
             </p>
             <div className="flex items-center gap-4">
-              <button className="hover:text-yellow-500 transition-colors">
+              <Link
+                to="/cookie-settings"
+                className="hover:text-yellow-500 transition-colors"
+              >
                 Cookie Settings
-              </button>
+              </Link>
               <Link
                 to="/privacy"
                 className="hover:text-yellow-500 transition-colors"
