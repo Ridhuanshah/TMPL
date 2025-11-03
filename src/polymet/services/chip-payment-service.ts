@@ -1,10 +1,11 @@
 /**
  * Chip Payment Gateway Service
  * https://docs.chip-in.asia/chip-collect/overview/introduction
+ * 
+ * NOTE: Chip API calls go through Supabase Edge Function to avoid CORS issues
  */
 
-const CHIP_API_URL = import.meta.env.VITE_CHIP_API_URL || 'https://gate.chip-in.asia/api/v1';
-const CHIP_API_KEY = import.meta.env.VITE_CHIP_API_KEY || 'Ydkw2alrtmVOVwRN59GTup02FNKGDduepwDmy0Chz_Y_hPJkwN6AhCFB2ak47P0iC5ydzpzXfnc_vCObmYvblQ==';
+import { supabase } from '../../lib/supabase';
 
 // Export Brand ID for use in components
 export const CHIP_BRAND_ID = import.meta.env.VITE_CHIP_BRAND_ID || '';
@@ -46,40 +47,41 @@ export interface ChipPurchaseResponse {
 }
 
 /**
- * Create a Chip payment purchase
+ * Create a Chip payment purchase via Edge Function (to avoid CORS)
  */
 export async function createChipPurchase(
   data: ChipPurchaseRequest
 ): Promise<{ success: boolean; data?: ChipPurchaseResponse; error?: string }> {
   try {
-    const response = await fetch(`${CHIP_API_URL}/purchases/`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${CHIP_API_KEY}`,
-        'Content-Type': 'application/json',
+    const { data: result, error } = await supabase.functions.invoke('chip-payment', {
+      body: {
+        bookingNumber: data.reference,
+        email: data.client.email,
+        fullName: data.client.full_name,
+        phone: data.client.phone,
+        amount: data.purchase.products[0].price / 100, // Convert cents back to MYR
+        origin: window.location.origin,
       },
-      body: JSON.stringify({
-        ...data,
-        purchase: {
-          ...data.purchase,
-          currency: data.purchase.currency || 'MYR',
-        },
-      }),
     });
 
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
+    if (error) {
+      console.error('Edge Function error:', error);
       return {
         success: false,
-        error: errorData.message || `HTTP ${response.status}: ${response.statusText}`,
+        error: error.message || 'Failed to create payment',
       };
     }
 
-    const result: ChipPurchaseResponse = await response.json();
+    if (result.error) {
+      return {
+        success: false,
+        error: result.error,
+      };
+    }
 
     return {
       success: true,
-      data: result,
+      data: result as ChipPurchaseResponse,
     };
   } catch (error) {
     console.error('Chip payment error:', error);
@@ -92,39 +94,17 @@ export async function createChipPurchase(
 
 /**
  * Get purchase details by ID
+ * TODO: Implement via Edge Function if needed
  */
 export async function getChipPurchase(
   purchaseId: string
 ): Promise<{ success: boolean; data?: ChipPurchaseResponse; error?: string }> {
-  try {
-    const response = await fetch(`${CHIP_API_URL}/purchases/${purchaseId}/`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${CHIP_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      return {
-        success: false,
-        error: `HTTP ${response.status}: ${response.statusText}`,
-      };
-    }
-
-    const result: ChipPurchaseResponse = await response.json();
-
-    return {
-      success: true,
-      data: result,
-    };
-  } catch (error) {
-    console.error('Get Chip purchase error:', error);
-    return {
-      success: false,
-      error: error instanceof Error ? error.message : 'Failed to get purchase details',
-    };
-  }
+  // Not implemented yet - would need Edge Function
+  console.warn('getChipPurchase not implemented yet');
+  return {
+    success: false,
+    error: 'Not implemented',
+  };
 }
 
 /**
