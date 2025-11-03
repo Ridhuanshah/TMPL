@@ -108,10 +108,10 @@ export function ReviewPaymentStep({ packageName }: ReviewPaymentStepProps) {
           .insert({
             id: user.id,
             email: email,
-            full_name: `${leadTraveler.first_name} ${leadTraveler.last_name}`,
+            name: `${leadTraveler.first_name} ${leadTraveler.last_name}`,
             phone: leadTraveler.phone,
             role: 'customer',
-            account_status: 'active'
+            status: 'active'
           });
         
         if (userInsertError) {
