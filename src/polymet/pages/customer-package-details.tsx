@@ -39,7 +39,8 @@ export function CustomerPackageDetails() {
       
       setLoading(true);
       try {
-        const data = await packageService.getById(id);
+        // Use getBySlug since the route parameter is actually a slug, not UUID
+        const data = await packageService.getBySlug(id);
         setPkg(data);
       } catch (error) {
         console.error('Error fetching package:', error);
