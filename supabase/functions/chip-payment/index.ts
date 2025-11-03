@@ -2,8 +2,9 @@ import "https://deno.land/x/xhr@0.3.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const CHIP_API_URL = "https://gate.chip-in.asia/api/v1/purchases/";
-const CHIP_SECRET_KEY = Deno.env.get("CHIP_SECRET_KEY");
-const CHIP_BRAND_ID = Deno.env.get("CHIP_BRAND_ID");
+// TODO: Move these to environment variables in production
+const CHIP_SECRET_KEY = Deno.env.get("CHIP_SECRET_KEY") || "Ydkw2alrtmVOVwRN59GTup02FNKGDduepwDmy0Chz_Y_hPJkwN6AhCFB2ak47P0iC5ydzpzXfnc_vCObmYvblQ==";
+const CHIP_BRAND_ID = Deno.env.get("CHIP_BRAND_ID") || "e2abb8a2-c64d-48f3-a78e-354358a2abde";
 
 serve(async (req) => {
   // Handle CORS
