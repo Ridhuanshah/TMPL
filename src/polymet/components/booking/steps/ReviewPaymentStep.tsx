@@ -101,26 +101,7 @@ export function ReviewPaymentStep({ packageName }: ReviewPaymentStepProps) {
         }
         
         console.log('✅ Auth account created for:', email);
-        
-        // Create corresponding user record in public.users table
-        const { error: userInsertError } = await supabase
-          .from('users')
-          .insert({
-            id: user.id,
-            email: email,
-            name: `${leadTraveler.first_name} ${leadTraveler.last_name}`,
-            phone: leadTraveler.phone,
-            role: 'customer',
-            status: 'active'
-          });
-        
-        if (userInsertError) {
-          console.error('Failed to create user record:', userInsertError);
-          setError('Account created but failed to complete setup. Please contact support.');
-          return;
-        }
-        
-        console.log('✅ User record created in database');
+        console.log('✅ User record auto-created via database trigger');
       }
       
       // Submit booking to Supabase
