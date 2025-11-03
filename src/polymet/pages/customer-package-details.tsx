@@ -25,6 +25,7 @@ import { packageService } from "@/polymet/services/package-service";
 import { PackageWithRelations } from "@/polymet/services/database.types";
 import useEmblaCarousel from "embla-carousel-react";
 import SimplePDFFlipbook from "@/polymet/components/simple-pdf-flipbook";
+import { BookingWidget } from "@/polymet/components/booking-widget";
 
 export function CustomerPackageDetails() {
   const { id } = useParams<{ id: string }>();
@@ -192,8 +193,11 @@ export function CustomerPackageDetails() {
         </div>
       </section>
 
-      {/* Main Content Container */}
+      {/* Main Content Container - Grid Layout with Sidebar */}
       <div className="max-w-7xl mx-auto px-4 py-12 md:py-16">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Left Column: Main Content */}
+          <div className="lg:col-span-2 space-y-12 pb-32 lg:pb-0">
         {/* Package Summary Card */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
@@ -541,51 +545,6 @@ export function CustomerPackageDetails() {
         )}
 
 
-        {/* Booking CTA Section */}
-        <section className="mt-16 md:mt-24 bg-gray-900 -mx-4 px-4 py-12 md:py-16 text-white">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-8">
-              Want to Make a Booking?
-            </h2>
-            <p className="text-lg text-gray-300 mb-12">
-              Get in touch with our travel experts to customize your perfect trip
-            </p>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-              <div className="p-6 bg-white/10 rounded-lg">
-                <Phone className="w-8 h-8 mx-auto mb-3 text-yellow-400" />
-                <h3 className="font-semibold mb-2">Call Us</h3>
-                <p className="text-gray-300">+60 19 661 6388</p>
-              </div>
-              <div className="p-6 bg-white/10 rounded-lg">
-                <MessageSquare className="w-8 h-8 mx-auto mb-3 text-yellow-400" />
-                <h3 className="font-semibold mb-2">WhatsApp</h3>
-                <Button
-                  variant="link"
-                  className="text-yellow-400"
-                  onClick={() =>
-                    window.open("https://wa.me/60196616388", "_blank")
-                  }
-                >
-                  Chat with us
-                </Button>
-              </div>
-              <div className="p-6 bg-white/10 rounded-lg">
-                <Mail className="w-8 h-8 mx-auto mb-3 text-yellow-400" />
-                <h3 className="font-semibold mb-2">Email</h3>
-                <p className="text-gray-300">info@tmplescapade.my</p>
-              </div>
-            </div>
-
-            <Button
-              size="lg"
-              className="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold text-lg px-12"
-            >
-              Get A Quote
-            </Button>
-          </div>
-        </section>
-
         {/* Social Share Bar */}
         <section className="mt-12">
           <div className="max-w-4xl mx-auto">
@@ -629,6 +588,13 @@ export function CustomerPackageDetails() {
             </div>
           </div>
         </section>
+          </div>
+          
+          {/* Right Column: Booking Widget */}
+          <div className="lg:col-span-1">
+            <BookingWidget package={pkg} />
+          </div>
+        </div>
       </div>
 
       {/* Floating Animation CSS */}
