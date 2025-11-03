@@ -45,3 +45,10 @@ coverage/
 .cache/
 temp/
 tmp/
+
+# Development notes and documentation (keep only README.md)
+*.md
+!README.md
+.windsurf/
+sample-itinerary.pdf
+chip-payment.png
