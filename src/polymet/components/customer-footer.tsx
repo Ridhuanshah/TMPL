@@ -213,6 +213,12 @@ export function CustomerFooter({ className = "" }: CustomerFooterProps) {
               >
                 Terms of Service
               </Link>
+              <Link
+                to="/refund"
+                className="hover:text-yellow-500 transition-colors"
+              >
+                Refund Policy
+              </Link>
             </div>
           </div>
         </div>

@@ -19,6 +19,7 @@ import { CustomerPackageDetails } from "@/polymet/pages/customer-package-details
 import { CookieSettingsPage } from "@/polymet/pages/cookie-settings";
 import { PrivacyPolicyPage } from "@/polymet/pages/privacy-policy";
 import { TermsOfServicePage } from "@/polymet/pages/terms-of-service";
+import { RefundPolicyPage } from "@/polymet/pages/refund-policy";
 import { DashboardOverview } from "@/polymet/pages/dashboard-overview";
 import { PackageManagement } from "@/polymet/pages/package-management";
 import { PackageForm } from "@/polymet/pages/package-form";
@@ -135,6 +136,16 @@ export default function AdminDashboard() {
             element={
               <CustomerLayout>
                 <TermsOfServicePage />
+              </CustomerLayout>
+            }
+          />
+
+          {/* Refund Policy Page */}
+          <Route
+            path="/refund"
+            element={
+              <CustomerLayout>
+                <RefundPolicyPage />
               </CustomerLayout>
             }
           />

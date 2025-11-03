@@ -380,6 +380,7 @@ export const footerData = {
     { label: "Contact", href: "/contact" },
     { label: "Terms & Conditions", href: "/terms" },
     { label: "Privacy Policy", href: "/privacy" },
+    { label: "Refund Policy", href: "/refund" },
   ],
 
   workingHours: {
