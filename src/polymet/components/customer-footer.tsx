@@ -202,16 +202,16 @@ export function CustomerFooter({ className = "" }: CustomerFooterProps) {
                 Cookie Settings
               </Link>
               <Link
-                to="/privacy"
-                className="hover:text-yellow-500 transition-colors"
-              >
-                Privacy Policy
-              </Link>
-              <Link
                 to="/terms"
                 className="hover:text-yellow-500 transition-colors"
               >
                 Terms of Service
+              </Link>
+              <Link
+                to="/privacy"
+                className="hover:text-yellow-500 transition-colors"
+              >
+                Privacy Policy
               </Link>
               <Link
                 to="/refund"
