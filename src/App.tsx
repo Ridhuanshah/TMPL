@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 import { AuthProvider } from "@/polymet/components/auth-context";
 import { ProtectedRoute } from "@/polymet/components/protected-route";
+import { ScrollToTop } from "@/polymet/components/scroll-to-top";
 import { AdminLayout } from "@/polymet/layouts/admin-layout";
 import { CustomerLayout } from "@/polymet/layouts/customer-layout";
 import { Login } from "@/polymet/pages/login";
@@ -45,6 +46,7 @@ import { Toaster } from "@/components/ui/toaster";
 export default function AdminDashboard() {
   return (
     <Router>
+      <ScrollToTop />
       <AuthProvider>
         <Routes>
           {/* Customer-Facing Homepage */}
