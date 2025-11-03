@@ -317,19 +317,20 @@ export async function submitBooking(bookingState: BookingState, customerId: stri
       if (couponUsageError) throw couponUsageError;
     }
 
-    // 7. Update capacity
+    // 7. Update capacity (only update 'booked' - 'available' is a generated column)
     console.log('4️⃣  Updating departure date capacity...');
     console.log('Departure Date ID:', bookingState.departure_date_id);
     console.log('Current booked:', departureDate.booked);
     console.log('Current available:', departureDate.available);
     console.log('Participants to add:', bookingState.participants);
+    console.log('New booked will be:', departureDate.booked + bookingState.participants);
     
     const { error: capacityError } = await supabase
       .from('package_departure_dates')
       // @ts-ignore
       .update({
         booked: departureDate.booked + bookingState.participants,
-        available: departureDate.available - bookingState.participants,
+        // Note: 'available' is a generated column (capacity - booked), don't update it manually
       })
       .eq('id', bookingState.departure_date_id);
 
