@@ -79,10 +79,12 @@ export function Login() {
         <Card className="shadow-xl">
             <CardHeader className="space-y-3">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center">
-                  <span className="text-2xl font-bold text-primary-foreground">
-                    T
-                  </span>
+                <div className="w-12 h-12 rounded-lg flex items-center justify-center overflow-hidden">
+                  <img
+                    src="/tmpl-logo.png"
+                    alt="TMPL Escapade"
+                    className="w-full h-full object-contain"
+                  />
                 </div>
                 <div>
                   <CardTitle className="text-2xl">TMPL Escapade</CardTitle>
