@@ -334,7 +334,12 @@ export async function submitBooking(bookingState: BookingState, customerId: stri
       .eq('id', bookingState.departure_date_id);
 
     if (capacityError) {
-      console.error('❌ Failed to update capacity:', capacityError);
+      console.error('❌ Failed to update capacity - FULL ERROR:');
+      console.error('Error code:', capacityError.code);
+      console.error('Error message:', capacityError.message);
+      console.error('Error details:', capacityError.details);
+      console.error('Error hint:', capacityError.hint);
+      console.error('Complete error object:', JSON.stringify(capacityError, null, 2));
       throw capacityError;
     }
     console.log('✅ Capacity updated successfully');
