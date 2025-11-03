@@ -46,7 +46,7 @@ export function DateSelector({ packageId, selectedDateId, onSelect }: DateSelect
       
       const mockDates: PackageDepartureDate[] = [
         {
-          id: '1',
+          id: 'a1111111-1111-1111-1111-111111111111',
           package_id: packageId,
           start_date: '2025-02-15',
           end_date: '2025-02-22',
@@ -59,7 +59,7 @@ export function DateSelector({ packageId, selectedDateId, onSelect }: DateSelect
           trip_code: 'TRP-001',
         },
         {
-          id: '2',
+          id: 'a2222222-2222-2222-2222-222222222222',
           package_id: packageId,
           start_date: '2025-03-10',
           end_date: '2025-03-17',
@@ -72,7 +72,7 @@ export function DateSelector({ packageId, selectedDateId, onSelect }: DateSelect
           trip_code: 'TRP-002',
         },
         {
-          id: '3',
+          id: 'a3333333-3333-3333-3333-333333333333',
           package_id: packageId,
           start_date: '2025-04-05',
           end_date: '2025-04-12',
@@ -85,7 +85,7 @@ export function DateSelector({ packageId, selectedDateId, onSelect }: DateSelect
           trip_code: 'TRP-003',
         },
         {
-          id: '4',
+          id: 'a4444444-4444-4444-4444-444444444444',
           package_id: packageId,
           start_date: '2025-05-20',
           end_date: '2025-05-27',
