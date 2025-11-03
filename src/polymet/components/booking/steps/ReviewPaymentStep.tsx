@@ -54,12 +54,53 @@ export function ReviewPaymentStep({ packageName }: ReviewPaymentStepProps) {
       const { submitBooking } = await import('../../../services/booking-service');
       const { supabase } = await import('../../../../lib/supabase');
       
-      // Get current user ID (you might need to get this from auth context)
-      const { data: { user } } = await supabase.auth.getUser();
+      // Get current user
+      let { data: { user } } = await supabase.auth.getUser();
       
+      // If no user, auto-create account from lead traveler email
       if (!user) {
-        setError('You must be logged in to complete booking');
-        return;
+        const leadTraveler = state.travelers.find(t => t.is_lead_traveler) || state.travelers[0];
+        const email = leadTraveler?.email;
+        
+        if (!email) {
+          setError('Lead traveler email is required');
+          return;
+        }
+        
+        // Generate temporary password
+        const tempPassword = Math.random().toString(36).slice(-12) + 'Aa1!';
+        
+        // Try to sign up
+        const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+          email,
+          password: tempPassword,
+          options: {
+            data: {
+              full_name: `${leadTraveler.first_name} ${leadTraveler.last_name}`,
+              phone: leadTraveler.phone
+            },
+            emailRedirectTo: `${window.location.origin}/auth/callback`
+          }
+        });
+        
+        if (signUpError) {
+          // Check if user already exists
+          if (signUpError.message.includes('already registered')) {
+            setError('This email is already registered. Please login to continue.');
+            return;
+          }
+          setError(`Account creation failed: ${signUpError.message}`);
+          return;
+        }
+        
+        user = signUpData.user;
+        
+        if (!user) {
+          setError('Failed to create account. Please try again.');
+          return;
+        }
+        
+        console.log('✅ Account auto-created for:', email);
       }
       
       // Submit booking to Supabase
@@ -71,8 +112,7 @@ export function ReviewPaymentStep({ packageName }: ReviewPaymentStepProps) {
       }
       
       // Update state with booking details
-      // (You might want to add these to BookingContext)
-      console.log('Booking successful!', result);
+      console.log('✅ Booking successful!', result);
       
       // Move to confirmation step
       completeStep(4);
