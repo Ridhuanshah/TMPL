@@ -101,6 +101,14 @@ export function ReviewPaymentStep({ packageName }: ReviewPaymentStepProps) {
     setSubmitting(true);
     setError('');
 
+    // Debug logger - START
+    console.log('========================================');
+    console.log('🚀 BOOKING SUBMISSION STARTED');
+    console.log('========================================');
+    console.log('Timestamp:', new Date().toISOString());
+    console.log('Payment Plan:', state.payment_plan);
+    console.log('Total Amount:', state.pricing.total_amount);
+
     try {
       const leadTraveler = state.travelers.find(t => t.is_lead_traveler) || state.travelers[0];
       const email = leadTraveler?.email;
@@ -132,11 +140,23 @@ export function ReviewPaymentStep({ packageName }: ReviewPaymentStepProps) {
       }
       
       console.log('✅ Guest user created/retrieved:', userId);
+      console.log('User UUID format valid:', /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(userId));
       
       // Submit booking to Supabase
+      console.log('📤 Submitting booking to database...');
       const result = await submitBooking(state, userId);
       
+      console.log('📥 Booking submission result:', {
+        success: result.success,
+        booking_number: result.booking_number,
+        error: result.error
+      });
+      
       if (!result.success || !result.booking_number) {
+        console.error('❌ BOOKING FAILED:', result.error);
+        console.log('========================================');
+        console.log('🚫 BOOKING SUBMISSION FAILED');
+        console.log('========================================');
         setError(result.error || 'Failed to submit booking');
         return;
       }
@@ -146,17 +166,33 @@ export function ReviewPaymentStep({ packageName }: ReviewPaymentStepProps) {
       
       // Check if payment is required (not pay later)
       if (state.payment_plan !== 'pay_later') {
+        console.log('💳 Payment required - Initializing Chip payment...');
+        console.log('Payment Plan:', state.payment_plan);
+        console.log('Amount:', state.payment_plan === 'deposit' ? calculateDepositAmount() : state.pricing.total_amount);
+        
         // Redirect to Chip payment gateway
         await handleChipPayment(result.booking_number, email);
         return;
       }
       
+      console.log('✅ Pay Later selected - Proceeding to confirmation');
+      console.log('========================================');
+      console.log('🎉 BOOKING COMPLETED SUCCESSFULLY');
+      console.log('========================================');
+      
       // Move to confirmation step for pay later
       completeStep(4);
       nextStep();
     } catch (err) {
+      console.error('========================================');
+      console.error('💥 EXCEPTION CAUGHT');
+      console.error('========================================');
+      console.error('Error type:', err instanceof Error ? err.constructor.name : typeof err);
+      console.error('Error message:', err instanceof Error ? err.message : String(err));
+      console.error('Full error:', err);
+      console.error('========================================');
+      
       setError('Failed to submit booking. Please try again.');
-      console.error(err);
     } finally {
       setSubmitting(false);
     }
