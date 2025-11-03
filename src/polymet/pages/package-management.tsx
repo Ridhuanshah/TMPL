@@ -563,16 +563,35 @@ export function PackageManagement() {
                     </div>
                   </TableCell>
                   <TableCell>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-8 w-8 p-0"
+                    <div className="flex items-center gap-2">
+                      {/* View Frontend Button */}
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-8 w-8 p-0"
+                        asChild
+                      >
+                        <Link 
+                          to={`/packages/${pkg.id}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          title="View customer page"
                         >
-                          <MoreHorizontalIcon className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
+                          <EyeIcon className="h-4 w-4 text-blue-600" />
+                        </Link>
+                      </Button>
+
+                      {/* Actions Dropdown */}
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-8 w-8 p-0"
+                          >
+                            <MoreHorizontalIcon className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuItem asChild>
@@ -606,6 +625,7 @@ export function PackageManagement() {
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
+                    </div>
                   </TableCell>
                 </TableRow>
                 );
