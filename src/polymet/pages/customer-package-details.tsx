@@ -20,6 +20,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { packageService } from "@/polymet/services/package-service";
 import { PackageWithRelations } from "@/polymet/services/database.types";
 import useEmblaCarousel from "embla-carousel-react";
@@ -315,38 +316,51 @@ export function CustomerPackageDetails() {
           </div>
         </section>
 
-        {/* Package Highlights */}
+        {/* Package Information Tabs */}
         <section className="mt-16 md:mt-24">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-              Trip Highlights
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {pkg.highlights.map((highlight, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                  className="flex items-start gap-3 p-4 rounded-lg hover:bg-gray-50 transition-colors"
-                >
-                  <Star className="w-6 h-6 text-yellow-500 fill-yellow-500 flex-shrink-0 mt-1" />
-                  <span className="text-gray-700 font-medium">{highlight}</span>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
+          <div className="max-w-6xl mx-auto px-4">
+            <Tabs defaultValue="highlights" className="w-full">
+              <TabsList className="grid w-full grid-cols-2 md:grid-cols-5 h-auto mb-8">
+                <TabsTrigger value="highlights" className="text-xs md:text-sm py-3">
+                  Highlights
+                </TabsTrigger>
+                <TabsTrigger value="itinerary" className="text-xs md:text-sm py-3">
+                  Itinerary
+                </TabsTrigger>
+                <TabsTrigger value="included" className="text-xs md:text-sm py-3">
+                  Included
+                </TabsTrigger>
+                <TabsTrigger value="tips" className="text-xs md:text-sm py-3">
+                  Tips
+                </TabsTrigger>
+                <TabsTrigger value="items" className="text-xs md:text-sm py-3">
+                  Items
+                </TabsTrigger>
+              </TabsList>
 
-        {/* Daily Itinerary */}
-        {pkg.daily_itinerary && pkg.daily_itinerary.length > 0 && (
-          <section className="mt-16 md:mt-24 bg-gray-50 -mx-4 px-4 py-12 md:py-16">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-                Daily Itinerary
-              </h2>
-              <div className="space-y-6">
+              {/* Trip Highlights Tab */}
+              <TabsContent value="highlights" className="mt-0">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {pkg.highlights.map((highlight, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      viewport={{ once: true }}
+                      className="flex items-start gap-3 p-4 rounded-lg hover:bg-gray-50 transition-colors"
+                    >
+                      <Star className="w-6 h-6 text-yellow-500 fill-yellow-500 flex-shrink-0 mt-1" />
+                      <span className="text-gray-700 font-medium">{highlight}</span>
+                    </motion.div>
+                  ))}
+                </div>
+              </TabsContent>
+
+              {/* Daily Itinerary Tab */}
+              <TabsContent value="itinerary" className="mt-0">
+                {pkg.daily_itinerary && pkg.daily_itinerary.length > 0 && (
+                <div className="space-y-6">
                 {pkg.daily_itinerary.map((day, index) => (
                   <motion.div
                     key={day.id}
@@ -418,18 +432,13 @@ export function CustomerPackageDetails() {
                     </Card>
                   </motion.div>
                 ))}
-              </div>
-            </div>
-          </section>
-        )}
+                </div>
+                )}
+              </TabsContent>
 
-        {/* Inclusions & Exclusions */}
-        <section className="mt-16 md:mt-24">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-              What's Included
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {/* What's Included Tab */}
+              <TabsContent value="included" className="mt-0">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* Inclusions */}
               <div>
                 <h3 className="text-2xl font-bold text-green-600 mb-6 flex items-center gap-2">
@@ -461,7 +470,52 @@ export function CustomerPackageDetails() {
                   ))}
                 </ul>
               </div>
-            </div>
+                </div>
+              </TabsContent>
+
+              {/* Travel Tips Tab */}
+              <TabsContent value="tips" className="mt-0">
+                {pkg.travel_tips && pkg.travel_tips.length > 0 && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {pkg.travel_tips.map((tip, index) => (
+                      <Card key={tip.id}>
+                        <CardContent className="p-6">
+                          <h3 className="font-bold text-lg mb-2">{tip.title}</h3>
+                          <p className="text-gray-700">{tip.description}</p>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                )}
+                {(!pkg.travel_tips || pkg.travel_tips.length === 0) && (
+                  <p className="text-center text-gray-500 py-8">No travel tips available.</p>
+                )}
+              </TabsContent>
+
+              {/* Essential Items Tab */}
+              <TabsContent value="items" className="mt-0">
+                {pkg.essential_items && pkg.essential_items.length > 0 && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                    {pkg.essential_items.map((item, index) => (
+                      <motion.div
+                        key={item.id}
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.3, delay: index * 0.05 }}
+                        viewport={{ once: true }}
+                        className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg"
+                      >
+                        <Check className="w-5 h-5 text-green-600 flex-shrink-0" />
+                        <span className="text-gray-700 font-medium">{item.item_name}</span>
+                      </motion.div>
+                    ))}
+                  </div>
+                )}
+                {(!pkg.essential_items || pkg.essential_items.length === 0) && (
+                  <p className="text-center text-gray-500 py-8">No essential items listed.</p>
+                )}
+              </TabsContent>
+            </Tabs>
           </div>
         </section>
 
