@@ -79,8 +79,10 @@ export function CustomerPackageDetails() {
   }
 
   // Convert database format to display format
-  const heroImage = pkg.images.find(img => img.type === 'hero')?.url || pkg.images[0]?.url;
-  const galleryImages = pkg.images.filter(img => img.type === 'gallery').map(img => img.url);
+  // Supabase returns package_images, handle both formats
+  const images = (pkg as any).package_images || pkg.images || [];
+  const heroImage = pkg.hero_image || images.find((img: any) => img.type === 'hero')?.url || images[0]?.url;
+  const galleryImages = pkg.gallery_images || images.filter((img: any) => img.type === 'gallery').map((img: any) => img.url);
 
   const scrollPrev = () => emblaApi && emblaApi.scrollPrev();
   const scrollNext = () => emblaApi && emblaApi.scrollNext();
