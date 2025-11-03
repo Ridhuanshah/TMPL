@@ -155,8 +155,11 @@ export function PackageForm() {
         try {
           const existingPackage = await packageService.getById(id);
           if (existingPackage) {
-            // Load package data from Supabase
-            setFormData(existingPackage as any);
+            // Load package data from Supabase, preserving any selected file
+            setFormData((prev) => ({
+              ...existingPackage as any,
+              pdfFile: (prev as any).pdfFile, // Preserve selected PDF file
+            }));
             console.log('Loaded package from Supabase:', existingPackage);
             console.log('PDF Itinerary URL:', existingPackage.pdfItinerary);
           }
