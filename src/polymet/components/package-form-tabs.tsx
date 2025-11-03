@@ -813,7 +813,8 @@ export function PackageFormTabs({
                   Upload a PDF file that will be displayed as an interactive 3D flipbook for customers
                 </p>
                 
-                {formData.pdfItinerary && (
+                {/* Show existing URL */}
+                {formData.pdfItinerary && !(formData as any).pdfFile && (
                   <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-md">
                     <FileIcon className="h-4 w-4 text-green-600" />
                     <span className="text-sm text-green-700 flex-1 truncate">
@@ -824,7 +825,32 @@ export function PackageFormTabs({
                       variant="ghost"
                       size="sm"
                       onClick={() =>
-                        onFormDataChange({ ...formData, pdfItinerary: "" })
+                        onFormDataChange({ ...formData, pdfItinerary: "", pdfFile: undefined } as any)
+                      }
+                    >
+                      <XIcon className="h-4 w-4" />
+                    </Button>
+                  </div>
+                )}
+
+                {/* Show selected file */}
+                {(formData as any).pdfFile && (
+                  <div className="flex items-center gap-2 p-3 bg-blue-50 border border-blue-200 rounded-md">
+                    <FileIcon className="h-4 w-4 text-blue-600" />
+                    <div className="flex-1">
+                      <div className="text-sm text-blue-700 font-medium">
+                        {(formData as any).pdfFile.name}
+                      </div>
+                      <div className="text-xs text-blue-600">
+                        {((formData as any).pdfFile.size / 1024 / 1024).toFixed(2)} MB
+                      </div>
+                    </div>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() =>
+                        onFormDataChange({ ...formData, pdfFile: undefined } as any)
                       }
                     >
                       <XIcon className="h-4 w-4" />
@@ -841,8 +867,25 @@ export function PackageFormTabs({
                     onChange={(e) => {
                       const file = e.target.files?.[0];
                       if (file) {
+                        // Validate file size
+                        if (file.size > 10 * 1024 * 1024) {
+                          alert('File size must be less than 10MB');
+                          e.target.value = '';
+                          return;
+                        }
+                        
+                        // Validate file type
+                        if (!file.type.includes('pdf')) {
+                          alert('Only PDF files are allowed');
+                          e.target.value = '';
+                          return;
+                        }
+                        
                         // Store file in form data temporarily
                         onFormDataChange({ ...formData, pdfFile: file } as any);
+                        
+                        // Reset the input so same file can be selected again
+                        e.target.value = '';
                       }
                     }}
                   />
@@ -855,12 +898,12 @@ export function PackageFormTabs({
                     }}
                   >
                     <UploadIcon className="h-4 w-4 mr-2" />
-                    Choose PDF File
+                    {(formData as any).pdfFile ? 'Change PDF File' : 'Choose PDF File'}
                   </Button>
                 </div>
 
                 <p className="text-xs text-gray-400">
-                  💡 Maximum file size: 10MB. The PDF will be uploaded automatically when you save the package.
+                  💡 Maximum file size: 10MB. Select a PDF file and it will be uploaded when you save the package.
                 </p>
               </div>
             </CardContent>

@@ -328,9 +328,17 @@ export function PackageForm() {
       // Upload PDF if a file was selected
       if ((formData as any).pdfFile) {
         const file = (formData as any).pdfFile;
+        console.log('Uploading PDF file:', file.name, 'Size:', file.size);
+        
         const uploadedUrl = await packageService.uploadPDF(file, id || 'new');
         if (uploadedUrl) {
           pdfUrl = uploadedUrl;
+          console.log('PDF uploaded successfully:', uploadedUrl);
+        } else {
+          console.error('PDF upload failed - no URL returned');
+          alert('Failed to upload PDF. Please check:\n1. Supabase Storage bucket "package-files" exists\n2. Bucket has public access enabled\n3. Check browser console for errors');
+          setIsLoading(false);
+          return;
         }
       }
 
