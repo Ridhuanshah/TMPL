@@ -166,7 +166,7 @@ export function CustomerFooter({ className = "" }: CustomerFooterProps) {
         <div className="container mx-auto px-6 py-4">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm">
             <p>
-              © {new Date().getFullYear()} TMPL Escapade. All rights reserved.
+              © {new Date().getFullYear()} TMPL ESCAPADE & TOURS SDN. BHD. (1522397X / 202301028474). All rights reserved.
             </p>
             <div className="flex items-center gap-4">
               <Link

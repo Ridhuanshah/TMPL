@@ -291,8 +291,8 @@ export function TermsOfServicePage() {
         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mt-6">
           <h3 className="text-lg font-semibold text-yellow-900 mb-3">Contact Information</h3>
           <div className="space-y-2 text-gray-800">
-            <p><strong>TMPL Escapade Sdn Bhd</strong></p>
-            <p>Company Registration No: 202401234567 (1234567-X)</p>
+            <p><strong>TMPL ESCAPADE & TOURS SDN. BHD.</strong></p>
+            <p>Company Registration No: 1522397X / 202301028474</p>
             <p>Tourism License No: KPL/LN 1234</p>
             <p className="mt-3">123 Travel Street, Kuala Lumpur, Malaysia</p>
             <p>Email: <a href="mailto:info@tmplescapade.my" className="text-yellow-600 hover:text-yellow-700 underline">info@tmplescapade.my</a></p>

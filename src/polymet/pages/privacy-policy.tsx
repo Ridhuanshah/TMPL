@@ -224,7 +224,8 @@ export function PrivacyPolicyPage() {
         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mt-6">
           <h3 className="text-lg font-semibold text-yellow-900 mb-3">Contact Information</h3>
           <div className="space-y-2 text-gray-800">
-            <p><strong>TMPL Escapade Sdn Bhd</strong></p>
+            <p><strong>TMPL ESCAPADE & TOURS SDN. BHD.</strong></p>
+            <p>Registration No: 1522397X / 202301028474</p>
             <p>123 Travel Street, Kuala Lumpur, Malaysia</p>
             <p>Email: <a href="mailto:privacy@tmplescapade.my" className="text-yellow-600 hover:text-yellow-700 underline">privacy@tmplescapade.my</a></p>
             <p>Phone: <a href="tel:+60312345678" className="text-yellow-600 hover:text-yellow-700 underline">+60 3-1234 5678</a></p>
