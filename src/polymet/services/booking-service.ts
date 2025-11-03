@@ -179,8 +179,14 @@ export async function validateCoupon(code: string, totalAmount: number) {
 
 export async function submitBooking(bookingState: BookingState, customerId: string) {
   try {
+    console.log('📝 Booking Service: Starting submission...');
+    console.log('Customer ID:', customerId);
+    console.log('Package ID:', bookingState.package_id);
+    console.log('Departure Date ID:', bookingState.departure_date_id);
+    
     // Start a transaction-like operation
     // 1. Generate booking number
+    console.log('1️⃣  Generating booking number...');
     const { data: bookingNumberData, error: bookingNumberError } = await supabase
       // @ts-ignore
       .rpc('get_next_booking_number', {
@@ -188,8 +194,12 @@ export async function submitBooking(bookingState: BookingState, customerId: stri
         p_departure_date: bookingState.departure_date?.start_date
       });
 
-    if (bookingNumberError) throw bookingNumberError;
+    if (bookingNumberError) {
+      console.error('❌ Failed to generate booking number:', bookingNumberError);
+      throw bookingNumberError;
+    }
     const bookingNumber = bookingNumberData as string;
+    console.log('✅ Booking number generated:', bookingNumber);
 
     // 2. Calculate dates
     const departureDate = bookingState.departure_date!;
@@ -197,6 +207,7 @@ export async function submitBooking(bookingState: BookingState, customerId: stri
     balanceDueDate.setDate(balanceDueDate.getDate() - 60); // 60 days before departure
 
     // 3. Insert booking
+    console.log('2️⃣  Inserting booking record...');
     const { data: booking, error: bookingError } = await supabase
       .from('bookings')
       .insert({
@@ -227,7 +238,11 @@ export async function submitBooking(bookingState: BookingState, customerId: stri
       .select()
       .single();
 
-    if (bookingError) throw bookingError;
+    if (bookingError) {
+      console.error('❌ Failed to insert booking:', bookingError);
+      throw bookingError;
+    }
+    console.log('✅ Booking record created:', booking.id);
 
     // 4. Insert travelers
     const travelersToInsert = bookingState.travelers.map((traveler, index) => ({
@@ -252,12 +267,17 @@ export async function submitBooking(bookingState: BookingState, customerId: stri
       special_needs: traveler.special_needs,
     }));
 
+    console.log('3️⃣  Inserting travelers...', travelersToInsert.length, 'travelers');
     const { error: travelersError } = await supabase
       .from('booking_travelers')
       // @ts-ignore - New table not in generated types yet
       .insert(travelersToInsert);
 
-    if (travelersError) throw travelersError;
+    if (travelersError) {
+      console.error('❌ Failed to insert travelers:', travelersError);
+      throw travelersError;
+    }
+    console.log('✅ Travelers inserted successfully');
 
     // 5. Insert add-ons if any
     if (bookingState.selected_addons.length > 0) {
