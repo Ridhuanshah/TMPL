@@ -100,6 +100,15 @@ export const heroSlides: HeroSlide[] = [
           "https://images.unsplash.com/photo-1609137144813-7d9921338f24?w=600&q=80", // Patagonia peaks
         packageId: "pkg_006", // Patagonia Expedition
       },
+      {
+        id: "loc-6",
+        title: "DISCOVER",
+        region: "AMAZON RAINFOREST",
+        countries: ["Brazil", "Peru", "Ecuador"],
+        image:
+          "https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=600&q=80", // Amazon rainforest river
+        packageId: "amazon-rainforest-explorer", // Amazon Rainforest Explorer
+      },
     ],
   },
   {
@@ -111,7 +120,7 @@ export const heroSlides: HeroSlide[] = [
       "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=1920&q=80", // Paris cityscape
     featuredLocations: [
       {
-        id: "loc-6",
+        id: "loc-7",
         title: "DISCOVER",
         region: "WESTERN EUROPE",
         countries: ["France", "Switzerland"],
@@ -119,7 +128,7 @@ export const heroSlides: HeroSlide[] = [
           "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600&q=80", // Paris
       },
       {
-        id: "loc-7",
+        id: "loc-8",
         title: "DISCOVER",
         region: "MEDITERRANEAN",
         countries: ["Italy", "Greece"],
@@ -127,7 +136,7 @@ export const heroSlides: HeroSlide[] = [
           "https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=600&q=80", // Rome
       },
       {
-        id: "loc-8",
+        id: "loc-9",
         title: "DISCOVER",
         region: "IBERIAN",
         countries: ["Spain", "Portugal"],
@@ -135,7 +144,7 @@ export const heroSlides: HeroSlide[] = [
           "https://images.unsplash.com/photo-1543783207-ec64e4d95325?w=600&q=80", // Barcelona
       },
       {
-        id: "loc-9",
+        id: "loc-10",
         title: "DISCOVER",
         region: "BRITISH ISLES",
         countries: ["UK", "Ireland"],
@@ -143,7 +152,7 @@ export const heroSlides: HeroSlide[] = [
           "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=600&q=80", // London
       },
       {
-        id: "loc-10",
+        id: "loc-11",
         title: "DISCOVER",
         region: "EASTERN EUROPE",
         countries: ["Czech", "Austria"],
@@ -161,7 +170,7 @@ export const heroSlides: HeroSlide[] = [
       "https://images.unsplash.com/photo-1480796927426-f609979314bd?w=1920&q=80", // Japanese temple
     featuredLocations: [
       {
-        id: "loc-11",
+        id: "loc-12",
         title: "DISCOVER",
         region: "EAST ASIA",
         countries: ["Japan", "South Korea"],
@@ -169,7 +178,7 @@ export const heroSlides: HeroSlide[] = [
           "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=600&q=80", // Tokyo
       },
       {
-        id: "loc-12",
+        id: "loc-13",
         title: "DISCOVER",
         region: "SOUTHEAST ASIA",
         countries: ["Thailand", "Vietnam"],
@@ -177,7 +186,7 @@ export const heroSlides: HeroSlide[] = [
           "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=600&q=80", // Thai temple
       },
       {
-        id: "loc-13",
+        id: "loc-14",
         title: "DISCOVER",
         region: "SOUTH ASIA",
         countries: ["India", "Nepal"],
@@ -185,7 +194,7 @@ export const heroSlides: HeroSlide[] = [
           "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=600&q=80", // Taj Mahal
       },
       {
-        id: "loc-14",
+        id: "loc-15",
         title: "DISCOVER",
         region: "ISLAND PARADISE",
         countries: ["Indonesia", "Malaysia"],
@@ -193,7 +202,7 @@ export const heroSlides: HeroSlide[] = [
           "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=600&q=80", // Bali
       },
       {
-        id: "loc-15",
+        id: "loc-16",
         title: "DISCOVER",
         region: "MIDDLE EAST",
         countries: ["UAE", "Jordan"],
