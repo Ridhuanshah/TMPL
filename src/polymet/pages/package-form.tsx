@@ -40,6 +40,7 @@ import {
   TravelPackage,
 } from "@/polymet/data/package-data";
 import { User } from "@/polymet/data/user-data";
+import { packageService } from "@/polymet/services/package-service";
 
 // Updated interface to use User instead of TravelAgent
 interface UpdatedPackageBookingDate {
@@ -322,30 +323,58 @@ export function PackageForm() {
     setIsLoading(true);
 
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      let pdfUrl = formData.pdfItinerary;
 
-      const packageData: TravelPackage = {
-        ...formData,
-        id: isEditing ? id! : `pkg_${Date.now()}`,
-        createdAt: isEditing ? formData.createdAt! : new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        bookings: isEditing ? formData.bookings || 0 : 0,
-        revenue: isEditing ? formData.revenue || 0 : 0,
-        rating: isEditing ? formData.rating || 0 : 0,
-        reviews: isEditing ? formData.reviews || 0 : 0,
-      } as TravelPackage;
+      // Upload PDF if a file was selected
+      if ((formData as any).pdfFile) {
+        const file = (formData as any).pdfFile;
+        const uploadedUrl = await packageService.uploadPDF(file, id || 'new');
+        if (uploadedUrl) {
+          pdfUrl = uploadedUrl;
+        }
+      }
 
-      console.log(
-        isEditing ? "Updating package:" : "Creating package:",
-        packageData
-      );
-      console.log("Booking dates with agents:", bookingDates);
+      // Prepare package data for Supabase
+      const packageData = {
+        name: formData.name,
+        slug: formData.slug || formData.name?.toLowerCase().replace(/\s+/g, '-'),
+        description: formData.description,
+        continent: formData.continent,
+        country: formData.country,
+        region: formData.region,
+        category: formData.category,
+        difficulty: formData.difficulty,
+        base_price: formData.basePrice,
+        currency: formData.currency || 'RM',
+        duration_days: formData.duration,
+        duration_nights: formData.duration ? formData.duration - 1 : 0,
+        min_group_size: formData.minGroupSize || 1,
+        max_group_size: formData.maxGroupSize,
+        status: formData.status || 'draft',
+        highlights: formData.highlights || [],
+        inclusions: inclusionsExclusions.inclusions.map(i => i.text).filter(Boolean),
+        exclusions: inclusionsExclusions.exclusions.map(e => e.text).filter(Boolean),
+        hero_image: formData.images?.hero,
+        gallery_images: formData.images?.gallery || [],
+        pdf_itinerary_url: pdfUrl,
+      };
 
-      // Mark as submitted to show success message
-      setIsSubmitted(true);
+      let result;
+      if (isEditing && id) {
+        result = await packageService.update(id, packageData);
+      } else {
+        result = await packageService.create(packageData);
+      }
+
+      if (result) {
+        console.log('Package saved successfully:', result);
+        setIsSubmitted(true);
+      } else {
+        throw new Error('Failed to save package');
+      }
     } catch (error) {
       console.error("Error saving package:", error);
+      alert('Failed to save package. Please try again.');
     } finally {
       setIsLoading(false);
     }

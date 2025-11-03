@@ -195,6 +195,73 @@ class PackageService {
       return mockDb.getAllPackages();
     }
   }
+
+  // Upload PDF file to Supabase Storage
+  async uploadPDF(file: File, packageId: string): Promise<string | null> {
+    try {
+      const fileName = `${packageId}_${Date.now()}.pdf`;
+      const filePath = `itineraries/${fileName}`;
+
+      const { error } = await supabase.storage
+        .from('package-files')
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: false,
+        });
+
+      if (error) throw error;
+
+      // Get public URL
+      const { data: publicData } = supabase.storage
+        .from('package-files')
+        .getPublicUrl(filePath);
+
+      return publicData.publicUrl;
+    } catch (error) {
+      console.error('Error uploading PDF:', error);
+      return null;
+    }
+  }
+
+  // Create new package
+  async create(packageData: any): Promise<PackageWithRelations | null> {
+    try {
+      const { data, error } = await supabase
+        .from('packages')
+        .insert(packageData as any)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data as any;
+    } catch (error) {
+      console.error('Error creating package:', error);
+      return null;
+    }
+  }
+
+  // Update existing package
+  async update(id: string, packageData: any): Promise<PackageWithRelations | null> {
+    try {
+      const updateData = {
+        ...packageData,
+        updated_at: new Date().toISOString(),
+      };
+
+      const { data, error } = await supabase
+        .from('packages')
+        .update(updateData as any)
+        .eq('id', id)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data as any;
+    } catch (error) {
+      console.error('Error updating package:', error);
+      return null;
+    }
+  }
 }
 
 // Export singleton instance

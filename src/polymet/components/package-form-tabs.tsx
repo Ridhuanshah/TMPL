@@ -15,6 +15,8 @@ import {
   CheckCircleIcon,
   AlertCircleIcon,
   RouteIcon,
+  UploadIcon,
+  FileIcon,
 } from "lucide-react";
 import { TravelPackage } from "@/polymet/data/package-data";
 import { User } from "@/polymet/data/user-data";
@@ -810,16 +812,55 @@ export function PackageFormTabs({
                 <p className="text-sm text-gray-500">
                   Upload a PDF file that will be displayed as an interactive 3D flipbook for customers
                 </p>
-                <Input
-                  id="pdfItinerary"
-                  value={formData.pdfItinerary || ""}
-                  onChange={(e) =>
-                    onFormDataChange({ ...formData, pdfItinerary: e.target.value })
-                  }
-                  placeholder="https://example.com/itinerary.pdf"
-                />
+                
+                {formData.pdfItinerary && (
+                  <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-md">
+                    <FileIcon className="h-4 w-4 text-green-600" />
+                    <span className="text-sm text-green-700 flex-1 truncate">
+                      {formData.pdfItinerary}
+                    </span>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() =>
+                        onFormDataChange({ ...formData, pdfItinerary: "" })
+                      }
+                    >
+                      <XIcon className="h-4 w-4" />
+                    </Button>
+                  </div>
+                )}
+
+                <div className="flex gap-2">
+                  <Input
+                    id="pdfItineraryFile"
+                    type="file"
+                    accept=".pdf"
+                    className="hidden"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        // Store file in form data temporarily
+                        onFormDataChange({ ...formData, pdfFile: file } as any);
+                      }
+                    }}
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="flex-1"
+                    onClick={() => {
+                      document.getElementById('pdfItineraryFile')?.click();
+                    }}
+                  >
+                    <UploadIcon className="h-4 w-4 mr-2" />
+                    Choose PDF File
+                  </Button>
+                </div>
+
                 <p className="text-xs text-gray-400">
-                  💡 Tip: Upload your PDF to a cloud storage service (Google Drive, Dropbox, etc.) and paste the public URL here
+                  💡 Maximum file size: 10MB. The PDF will be uploaded automatically when you save the package.
                 </p>
               </div>
             </CardContent>
