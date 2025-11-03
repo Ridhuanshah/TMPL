@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Users } from 'lucide-react';
 import { useBooking } from '../../../contexts/BookingContext';
 import { Button } from '../../../../components/ui/button';
@@ -9,8 +9,15 @@ import { travelerSchema } from '../../../schemas/booking-schemas';
 import type { TravelerInfo } from '../../../types/booking.types';
 
 export function TravelersStep() {
-  const { state, updateTraveler, copyTravelerData, nextStep, previousStep, completeStep } = useBooking();
+  const { state, setParticipants, updateTraveler, copyTravelerData, nextStep, previousStep, completeStep } = useBooking();
   const [errors, setErrors] = useState<Record<number, any>>({});
+
+  // Initialize travelers if empty (e.g., direct navigation or refresh)
+  useEffect(() => {
+    if (state.travelers.length === 0 && state.participants > 0) {
+      setParticipants(state.participants);
+    }
+  }, [state.travelers.length, state.participants, setParticipants]);
 
   const validateAndContinue = () => {
     const newErrors: Record<number, any> = {};
