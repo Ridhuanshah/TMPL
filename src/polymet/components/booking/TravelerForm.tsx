@@ -277,23 +277,6 @@ export function TravelerForm({
                     <p className="text-xs text-red-500">{errors.gender}</p>
                   )}
                 </div>
-
-                {/* Passport Number */}
-                <div className="space-y-2">
-                  <Label htmlFor={`passport-${index}`}>
-                    Passport Number <span className="text-red-500">*</span>
-                  </Label>
-                  <Input
-                    id={`passport-${index}`}
-                    value={traveler.passport_number}
-                    onChange={(e) => handleChange('passport_number', e.target.value)}
-                    placeholder="A12345678"
-                    className={errors.passport_number ? 'border-red-500' : ''}
-                  />
-                  {errors.passport_number && (
-                    <p className="text-xs text-red-500">{errors.passport_number}</p>
-                  )}
-                </div>
               </div>
             </div>
 
