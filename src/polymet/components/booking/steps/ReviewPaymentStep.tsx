@@ -70,7 +70,7 @@ export function ReviewPaymentStep({ packageName }: ReviewPaymentStepProps) {
         // Generate temporary password
         const tempPassword = Math.random().toString(36).slice(-12) + 'Aa1!';
         
-        // Try to sign up
+        // Try to sign up (with email confirmation disabled for testing)
         const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
           email,
           password: tempPassword,
@@ -79,7 +79,9 @@ export function ReviewPaymentStep({ packageName }: ReviewPaymentStepProps) {
               full_name: `${leadTraveler.first_name} ${leadTraveler.last_name}`,
               phone: leadTraveler.phone
             },
-            emailRedirectTo: `${window.location.origin}/auth/callback`
+            emailRedirectTo: `${window.location.origin}/auth/callback`,
+            // Skip email confirmation to avoid SMTP issues during testing
+            email_confirm: false
           }
         });
         
