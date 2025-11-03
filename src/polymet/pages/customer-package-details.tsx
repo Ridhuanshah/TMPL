@@ -477,7 +477,7 @@ export function CustomerPackageDetails() {
               <TabsContent value="tips" className="mt-0">
                 {pkg.travel_tips && pkg.travel_tips.length > 0 && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {pkg.travel_tips.map((tip, index) => (
+                    {pkg.travel_tips.map((tip) => (
                       <Card key={tip.id}>
                         <CardContent className="p-6">
                           <h3 className="font-bold text-lg mb-2">{tip.title}</h3>
