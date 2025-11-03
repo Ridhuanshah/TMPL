@@ -3,9 +3,11 @@
  * https://docs.chip-in.asia/chip-collect/overview/introduction
  */
 
-const CHIP_API_URL = 'https://gate.chip-in.asia/api/v1';
-const CHIP_API_KEY = 'Ydkw2alrtmVOVwRN59GTup02FNKGDduepwDmy0Chz_Y_hPJkwN6AhCFB2ak47P0iC5ydzpzXfnc_vCObmYvblQ=='; // Sandbox key
-const CHIP_BRAND_ID = ''; // To be set after getting from portal
+const CHIP_API_URL = import.meta.env.VITE_CHIP_API_URL || 'https://gate.chip-in.asia/api/v1';
+const CHIP_API_KEY = import.meta.env.VITE_CHIP_API_KEY || 'Ydkw2alrtmVOVwRN59GTup02FNKGDduepwDmy0Chz_Y_hPJkwN6AhCFB2ak47P0iC5ydzpzXfnc_vCObmYvblQ==';
+
+// Export Brand ID for use in components
+export const CHIP_BRAND_ID = import.meta.env.VITE_CHIP_BRAND_ID || '';
 
 export interface ChipProduct {
   name: string;

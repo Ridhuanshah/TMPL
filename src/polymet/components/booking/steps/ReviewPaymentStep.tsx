@@ -41,7 +41,7 @@ export function ReviewPaymentStep({ packageName }: ReviewPaymentStepProps) {
 
   const handleChipPayment = async (bookingNumber: string, customerEmail: string) => {
     try {
-      const { createChipPurchase, convertToCents } = await import('../../../services/chip-payment-service');
+      const { createChipPurchase, convertToCents, CHIP_BRAND_ID } = await import('../../../services/chip-payment-service');
       
       const leadTraveler = state.travelers.find(t => t.is_lead_traveler) || state.travelers[0];
       
@@ -69,7 +69,7 @@ export function ReviewPaymentStep({ packageName }: ReviewPaymentStepProps) {
           currency: 'MYR',
           notes: `Booking: ${bookingNumber} | Payment Plan: ${state.payment_plan}`,
         },
-        brand_id: import.meta.env.VITE_CHIP_BRAND_ID || '',
+        brand_id: CHIP_BRAND_ID,
         success_redirect: `${window.location.origin}/booking/payment-success?booking=${bookingNumber}`,
         failure_redirect: `${window.location.origin}/booking/payment-failed?booking=${bookingNumber}`,
         cancel_redirect: `${window.location.origin}/booking/payment-cancelled?booking=${bookingNumber}`,
