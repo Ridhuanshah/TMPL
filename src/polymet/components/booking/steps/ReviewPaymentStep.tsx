@@ -39,6 +39,58 @@ export function ReviewPaymentStep({ packageName }: ReviewPaymentStepProps) {
     setPaymentPlan(plan);
   };
 
+  const handleChipPayment = async (bookingNumber: string, customerEmail: string) => {
+    try {
+      const { createChipPurchase, convertToCents } = await import('../../../services/chip-payment-service');
+      
+      const leadTraveler = state.travelers.find(t => t.is_lead_traveler) || state.travelers[0];
+      
+      // Calculate payment amount based on payment plan
+      let amount = state.pricing.total_amount;
+      if (state.payment_plan === 'deposit') {
+        amount = calculateDepositAmount();
+      }
+      
+      // Create Chip purchase
+      const result = await createChipPurchase({
+        client: {
+          email: customerEmail,
+          full_name: `${leadTraveler.first_name} ${leadTraveler.last_name}`,
+          phone: leadTraveler.phone,
+        },
+        purchase: {
+          products: [
+            {
+              name: `Travel Package Booking - ${bookingNumber}`,
+              quantity: 1,
+              price: convertToCents(amount),
+            },
+          ],
+          currency: 'MYR',
+          notes: `Booking: ${bookingNumber} | Payment Plan: ${state.payment_plan}`,
+        },
+        brand_id: import.meta.env.VITE_CHIP_BRAND_ID || '',
+        success_redirect: `${window.location.origin}/booking/payment-success?booking=${bookingNumber}`,
+        failure_redirect: `${window.location.origin}/booking/payment-failed?booking=${bookingNumber}`,
+        cancel_redirect: `${window.location.origin}/booking/payment-cancelled?booking=${bookingNumber}`,
+        reference: bookingNumber,
+      });
+      
+      if (!result.success || !result.data) {
+        setError(result.error || 'Failed to initialize payment');
+        return;
+      }
+      
+      console.log('✅ Chip payment created:', result.data.id);
+      
+      // Redirect to Chip checkout
+      window.location.href = result.data.checkout_url;
+    } catch (err) {
+      setError('Failed to initialize payment gateway');
+      console.error('Chip payment error:', err);
+    }
+  };
+
   const handleSubmitBooking = async () => {
     // Validate terms accepted
     if (!state.terms_accepted) {
@@ -50,64 +102,25 @@ export function ReviewPaymentStep({ packageName }: ReviewPaymentStepProps) {
     setError('');
 
     try {
+      const leadTraveler = state.travelers.find(t => t.is_lead_traveler) || state.travelers[0];
+      const email = leadTraveler?.email;
+      
+      if (!email) {
+        setError('Lead traveler email is required');
+        return;
+      }
+
       // Import the service function
       const { submitBooking } = await import('../../../services/booking-service');
-      const { supabase } = await import('../../../../lib/supabase');
       
-      // Get current user
-      let { data: { user } } = await supabase.auth.getUser();
+      // SIMPLIFIED: No account registration, use email as guest identifier
+      // Generate a temporary user ID from email hash
+      const userId = `guest_${btoa(email).replace(/[^a-zA-Z0-9]/g, '').substring(0, 32)}`;
       
-      // If no user, auto-create account from lead traveler email
-      if (!user) {
-        const leadTraveler = state.travelers.find(t => t.is_lead_traveler) || state.travelers[0];
-        const email = leadTraveler?.email;
-        
-        if (!email) {
-          setError('Lead traveler email is required');
-          return;
-        }
-        
-        // Generate temporary password
-        const tempPassword = Math.random().toString(36).slice(-12) + 'Aa1!';
-        
-        // Try to sign up (with email confirmation disabled for testing)
-        const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
-          email,
-          password: tempPassword,
-          options: {
-            data: {
-              full_name: `${leadTraveler.first_name} ${leadTraveler.last_name}`,
-              phone: leadTraveler.phone
-            },
-            emailRedirectTo: `${window.location.origin}/auth/callback`,
-            // Skip email confirmation to avoid SMTP issues during testing
-            email_confirm: false
-          }
-        });
-        
-        if (signUpError) {
-          // Check if user already exists
-          if (signUpError.message.includes('already registered')) {
-            setError('This email is already registered. Please login to continue.');
-            return;
-          }
-          setError(`Account creation failed: ${signUpError.message}`);
-          return;
-        }
-        
-        user = signUpData.user;
-        
-        if (!user) {
-          setError('Failed to create account. Please try again.');
-          return;
-        }
-        
-        console.log('✅ Auth account created for:', email);
-        console.log('✅ User record auto-created via database trigger');
-      }
+      console.log('✅ Processing as guest booking for:', email);
       
       // Submit booking to Supabase
-      const result = await submitBooking(state, user.id);
+      const result = await submitBooking(state, userId);
       
       if (!result.success || !result.booking_number) {
         setError(result.error || 'Failed to submit booking');
@@ -117,7 +130,14 @@ export function ReviewPaymentStep({ packageName }: ReviewPaymentStepProps) {
       // Update state with booking details
       console.log('✅ Booking successful!', result);
       
-      // Move to confirmation step
+      // Check if payment is required (not pay later)
+      if (state.payment_plan !== 'pay_later') {
+        // Redirect to Chip payment gateway
+        await handleChipPayment(result.booking_number, email);
+        return;
+      }
+      
+      // Move to confirmation step for pay later
       completeStep(4);
       nextStep();
     } catch (err) {

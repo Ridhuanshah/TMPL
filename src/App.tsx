@@ -17,6 +17,9 @@ import { BlogPage } from "@/polymet/pages/blog";
 import { BlogPostPage } from "@/polymet/pages/blog-post";
 import { CustomerPackageDetails } from "@/polymet/pages/customer-package-details";
 import { CustomerBookingPage } from "@/polymet/pages/customer-booking";
+import { PaymentSuccessPage } from "@/polymet/pages/payment-success";
+import { PaymentFailedPage } from "@/polymet/pages/payment-failed";
+import { PaymentCancelledPage } from "@/polymet/pages/payment-cancelled";
 import { CookieSettingsPage } from "@/polymet/pages/cookie-settings";
 import { PrivacyPolicyPage } from "@/polymet/pages/privacy-policy";
 import { TermsOfServicePage } from "@/polymet/pages/terms-of-service";
@@ -117,6 +120,34 @@ export default function AdminDashboard() {
             element={
               <CustomerLayout>
                 <CustomerBookingPage />
+              </CustomerLayout>
+            }
+          />
+
+          {/* Payment Result Pages */}
+          <Route
+            path="/booking/payment-success"
+            element={
+              <CustomerLayout>
+                <PaymentSuccessPage />
+              </CustomerLayout>
+            }
+          />
+
+          <Route
+            path="/booking/payment-failed"
+            element={
+              <CustomerLayout>
+                <PaymentFailedPage />
+              </CustomerLayout>
+            }
+          />
+
+          <Route
+            path="/booking/payment-cancelled"
+            element={
+              <CustomerLayout>
+                <PaymentCancelledPage />
               </CustomerLayout>
             }
           />
