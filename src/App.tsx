@@ -16,6 +16,7 @@ import { BlogPage } from "@/polymet/pages/blog";
 import { BlogPostPage } from "@/polymet/pages/blog-post";
 import { CustomerPackageDetails } from "@/polymet/pages/customer-package-details";
 import { CookieSettingsPage } from "@/polymet/pages/cookie-settings";
+import { PrivacyPolicyPage } from "@/polymet/pages/privacy-policy";
 import { DashboardOverview } from "@/polymet/pages/dashboard-overview";
 import { PackageManagement } from "@/polymet/pages/package-management";
 import { PackageForm } from "@/polymet/pages/package-form";
@@ -111,6 +112,16 @@ export default function AdminDashboard() {
             element={
               <CustomerLayout>
                 <CookieSettingsPage />
+              </CustomerLayout>
+            }
+          />
+
+          {/* Privacy Policy Page */}
+          <Route
+            path="/privacy"
+            element={
+              <CustomerLayout>
+                <PrivacyPolicyPage />
               </CustomerLayout>
             }
           />
